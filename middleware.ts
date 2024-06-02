@@ -6,11 +6,6 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const isAuthAPI = req.url.startsWith(apiAuthPrefix);
 
-  console.log(req.url);
-
-  console.log("yea");
-  console.log(req.nextUrl.pathname);
-
   if (isAuthAPI) {
     return;
   }
@@ -24,8 +19,6 @@ export default auth((req) => {
     const regex = new RegExp(`${req.nextUrl.pathname}(?!.*${req.nextUrl.pathname})`);
     const url = req.url.replace(regex, "/api/auth/signin");
 
-    console.log(req.nextUrl.pathname);
-    console.log(url);
     console.log("REDIRECTING");
     return Response.redirect(url);
   }

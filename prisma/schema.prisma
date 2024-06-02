@@ -78,3 +78,43 @@ model Authenticator {
  
   @@id([userId, credentialID])
 }
+model Device {
+  id          Int      @id @default(autoincrement())
+  type        String
+  hostname    String
+  credentials String
+  backups     Backup[]
+}
+
+model Backup {
+  id         Int      @id @default(autoincrement())
+  deviceId   Int
+  createdAt  DateTime @default(now())
+  status     String
+  bytes      Int?
+  device     Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model Schedule {
+  id        Int       @id @default(autoincrement())
+  disabled  Boolean
+  cron      String
+  name      String
+  jobs      Job[]
+}
+
+model Destination {
+  id          Int      @id @default(autoincrement())
+  type        String
+  details     String // Representation of configuration/credentials as JSON
+}
+
+model Job {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  startedAt  DateTime?
+  finishedAt DateTime?
+  status     String
+  scheduleId Int
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+}

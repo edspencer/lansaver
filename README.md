@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Features
 
-## Getting Started
+Allows users to configure Devices on their network that they wish to back up configurations for - Firewalls, Managed Switches, Home Assistant instances, etc
 
-First, run the development server:
+## Supported Backup Sources
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- OPNSense
+- Home Assistant
+- TP Link Managed Switches
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Supported Destinations
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- git repository
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Models
 
-## Learn More
+Device
 
-To learn more about Next.js, take a look at the following resources:
+- type: String (e.g. opnsense, tplink, homeassistant, etc)
+- hostname: String
+- username: String
+- password: String
+- credentials?: String
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Backup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- device_id: Integer
+- created_at: Datetime
+- status: String
 
-## Deploy on Vercel
+Schedule
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- disabled: Boolean
+- cron: String
+- name: String
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Destination
+
+- type: String (e.g. git, ftp, scp, email)
+- how to represent these credentials/details?
+
+Job
+
+- created_at: Datetime
+- started_at: Datetime
+- finished_at: Datetime
+- status: Datetime
+- schedule_id: Integer
+
+Back everything up on the same schedule? Probably, but should probably be able to choose which devices on each Schedule.
+Probably most people would just want one schedule and back everything up at the same time
+
+A Schedule triggers zero or more backups. Once all have been performed, should do whatever user configures. Should track these as Jobs. Job status should be a state machine. So should Backup status - which is probably just queued, running, succeeded or error.
+
+A Destination represents some place where the backups should be sent. Destinations include git, ftp, email, scp, and each needs some custom code that will implement the way it should receive data (e.g. git adapter should check out repo, add files, commit and push. scp is probably a simpler implementation, as it email).

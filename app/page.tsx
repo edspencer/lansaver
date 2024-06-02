@@ -5,7 +5,7 @@ import { SignIn } from "./components/signin";
 export default async function Home() {
   const session = await auth();
 
-  console.log("Cagar");
+  console.log("Session");
   console.log(session);
 
   return (
