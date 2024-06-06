@@ -5,6 +5,8 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+import Providers from "./providers";
+
 export const metadata: Metadata = {
   title: "LANsaver",
   description: "Saves your LAN configurations",
@@ -168,7 +170,7 @@ export default function RootLayout({
             </Sidebar>
           }
         >
-          {children}
+          <Providers>{children}</Providers>
         </SidebarLayout>
       </body>
     </html>

@@ -60,6 +60,7 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
       <Table>
         <TableHead>
           <TableRow>
+            <TableHeader>ID</TableHeader>
             <TableHeader>Status</TableHeader>
             <TableHeader>Date</TableHeader>
             <TableHeader>Size</TableHeader>
@@ -69,6 +70,7 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
         <TableBody>
           {backups.map((backup) => (
             <TableRow key={backup.id}>
+              <TableCell>{backup.id}</TableCell>
               <TableCell className="font-medium">{backup.status}</TableCell>
               <TableCell>{backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}</TableCell>
               <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>

@@ -23,7 +23,7 @@ const agent = new https.Agent({
 
 export class OPNSenseBackupRunner implements BackupRunner {
   async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
-    const logger = createBackupLogger(backup.id);
+    const logger = await createBackupLogger(backup.id);
     let success = false;
     let bytes = 0;
     let responseText = null;

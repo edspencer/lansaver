@@ -21,7 +21,7 @@ export const createBackupLogger = (backupId: number) => {
   });
 };
 
-export async function readBackupLogs(backupId: string): Promise<string> {
+export async function getBackupLogs(backupId: string): Promise<string> {
   const logFilePath = path.join(process.cwd(), "logs", `backup_${backupId}.log`);
   try {
     return fs.readFileSync(logFilePath, "utf8");
