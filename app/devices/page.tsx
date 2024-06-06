@@ -1,9 +1,9 @@
 "use client";
 
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../components/table";
-import { Heading } from "../components/heading";
-import { Button } from "../components/button";
-import { Link } from "../components/link";
+import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../../components/table";
+import { Heading } from "../../components/heading";
+import { Button } from "../../components/button";
+import { Link } from "../../components/link";
 import type { Device } from "@prisma/client";
 import useSWR from "swr";
 

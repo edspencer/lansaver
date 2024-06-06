@@ -1,11 +1,12 @@
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/app/components/description-list";
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
 import bytes from "bytes";
+import { notFound } from "next/navigation";
 
-import { Heading, Subheading } from "@/app/components/heading";
-import { Button } from "@/app/components/button";
+import { Heading, Subheading } from "@/components/heading";
+import { Button } from "@/components/button";
 
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "@/app/components/table";
-import { BackupDeviceForm, DeleteDeviceButton } from "@/app/components/device/buttons";
+import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "@/components/table";
+import { BackupDeviceForm, DeleteDeviceButton } from "@/components/device/buttons";
 import Link from "next/link";
 
 import { getDevice, getDeviceBackups } from "@/app/models/device";
@@ -14,7 +15,7 @@ export default async function DevicePage({ params: { id } }: { params: { id: str
   const device = await getDevice(parseInt(id, 10));
 
   if (!device) {
-    return <Heading>Device not found</Heading>;
+    return notFound();
   }
 
   return (
@@ -47,6 +48,7 @@ export default async function DevicePage({ params: { id } }: { params: { id: str
 }
 
 import { ArrowDownTrayIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { DeleteBackupForm } from "@/components/backup/delete";
 
 async function RecentBackups({ deviceId }: { deviceId: number }) {
   const backups = await getDeviceBackups(deviceId);
@@ -68,16 +70,16 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
             <TableRow key={backup.id}>
               <TableCell className="font-medium">{backup.status}</TableCell>
               <TableCell>
-                <Link href={`/devices/${backup.id}`}>{backup.createdAt.toDateString()}</Link>
+                <Link href={`/devices/${backup.id}`}>
+                  {backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}
+                </Link>
               </TableCell>
               <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>
               <TableCell className="gap-2 flex">
                 <Button outline title="Download">
                   <ArrowDownTrayIcon />
                 </Button>
-                <Button color="red" title="Delete Backup">
-                  <TrashIcon />
-                </Button>
+                <DeleteBackupForm backup={backup} />
               </TableCell>
             </TableRow>
           ))}

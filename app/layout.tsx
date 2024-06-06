@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Saves your LAN configurations",
 };
 
-import { Avatar } from "./components/avatar";
+import { Avatar } from "../components/avatar";
 import {
   Dropdown,
   DropdownButton,
@@ -18,9 +18,9 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
-} from "./components/dropdown";
-import { SidebarLayout } from "./components/sidebar-layout";
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "./components/navbar";
+} from "../components/dropdown";
+import { SidebarLayout } from "../components/sidebar-layout";
+import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "../components/navbar";
 import {
   Sidebar,
   SidebarBody,
@@ -29,7 +29,7 @@ import {
   SidebarItem,
   SidebarLabel,
   SidebarSection,
-} from "./components/sidebar";
+} from "../components/sidebar";
 import * as Headless from "@headlessui/react";
 import {
   ArrowRightStartOnRectangleIcon,
@@ -53,8 +53,8 @@ import {
   TicketIcon,
 } from "@heroicons/react/20/solid";
 
-import SignOutButton from "./components/signout-button";
-import UserMenuItem from "./components/user-menu-item";
+import SignOutButton from "../components/signout-button";
+import UserMenuItem from "../components/user-menu-item";
 
 export default function RootLayout({
   children,

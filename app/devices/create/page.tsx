@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { useFormState } from "react-dom";
-import { Heading } from "@/app/components/heading";
-import { Button } from "@/app/components/button";
-import { Field, Label, Description } from "@/app/components/fieldset";
-import { Input } from "@/app/components/input";
-import { Select } from "@/app/components/select";
+import { Heading } from "@/components/heading";
+import { Button } from "@/components/button";
+import { Field, Label, Description } from "@/components/fieldset";
+import { Input } from "@/components/input";
+import { Select } from "@/components/select";
 import error from "next/error";
-import { SubmitButton } from "@/app/components/device/buttons";
+import { SubmitButton } from "@/components/device/buttons";
 
 import { createDeviceAction } from "@/app/actions/devices";
 import { FormEvent } from "react";
 
 import type { CreateDeviceAction } from "@/app/actions/devices";
-import DeviceForm from "@/app/components/device/form";
+import DeviceForm from "@/components/device/form";
 
 const initialState = {
   message: "Cool",

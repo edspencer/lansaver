@@ -1,10 +1,10 @@
 "use client";
 import type { Device } from "@prisma/client";
-import { SubmitButton } from "@/app/components/device/buttons";
+import { SubmitButton } from "@/components/device/buttons";
 
-import { Input } from "@/app/components/input";
-import { Select } from "@/app/components/select";
-import { Field, Label, Description } from "@/app/components/fieldset";
+import { Input } from "@/components/input";
+import { Select } from "@/components/select";
+import { Field, Label, Description } from "@/components/fieldset";
 
 export default function DeviceForm({ device, formAction }: { device?: Device; formAction: any }) {
   return (
@@ -28,6 +28,7 @@ export default function DeviceForm({ device, formAction }: { device?: Device; fo
         <Input name="credentials" placeholder="okcool" defaultValue={device?.credentials} />
       </Field>
       <div className="flex justify-end">
+        {device && <input type="hidden" name="id" value={device.id} />}
         <SubmitButton />
       </div>
     </form>

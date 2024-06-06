@@ -13,10 +13,15 @@ export async function createDevice(data: Prisma.DeviceCreateInput) {
   return await prisma.device.create({ data });
 }
 
+export async function updateDevice(id: number, data: Prisma.DeviceUpdateInput) {
+  DeviceSchema.parse(data);
+  return await prisma.device.update({ where: { id }, data });
+}
+
 export async function deleteDevice(id: number) {
   return await prisma.device.delete({ where: { id } });
 }
 
 export async function getDeviceBackups(id: number) {
-  return await prisma.backup.findMany({ where: { deviceId: id } });
+  return await prisma.backup.findMany({ where: { deviceId: id }, orderBy: { createdAt: "desc" } });
 }
