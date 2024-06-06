@@ -27,7 +27,7 @@ export async function createBackupForDeviceId(deviceId: number) {
     },
   });
 
-  const backupData = await BackupRunnerFactory.startBackup(device);
+  const backupData = await BackupRunnerFactory.startBackup({ device, backup });
 
   await prisma.backup.update({
     where: {

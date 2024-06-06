@@ -1,8 +1,8 @@
-import type { Device } from "@prisma/client";
+import type { Device, Backup } from "@prisma/client";
 import { OPNSenseBackupRunner } from "./opnsense";
 
 export interface BackupRunner {
-  startBackup(device: Device): Promise<BackupOutcome>;
+  startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome>;
 }
 
 /**
@@ -38,15 +38,14 @@ export class BackupRunnerFactory {
   }
 
   // convenience method to start a backup without creating a runner
-  static startBackup(device: Device): Promise<BackupOutcome> {
-    return this.createMemoizedBackupRunner(device.type).startBackup(device);
+  static startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
+    return this.createMemoizedBackupRunner(device.type).startBackup({ device, backup });
   }
 }
 
 //represents the outcome of any given backup operation
 export type BackupOutcome = {
   success: boolean;
-  message: string;
   error?: any;
   bytes: number;
 };
