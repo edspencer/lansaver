@@ -1,3 +1,5 @@
+"use server";
+
 import { createLogger, format, transports } from "winston";
 import path from "path";
 import fs from "fs";
@@ -6,7 +8,7 @@ import fs from "fs";
 const logDirectory = process.env.LOGS_DIRECTORY || path.join(process.cwd(), "logs");
 fs.mkdirSync(logDirectory, { recursive: true });
 
-const createBackupLogger = (backupId: number) => {
+export const createBackupLogger = (backupId: number) => {
   const logFilePath = path.join(logDirectory, `backup_${backupId}.log`);
 
   return createLogger({
@@ -19,4 +21,12 @@ const createBackupLogger = (backupId: number) => {
   });
 };
 
-export { createBackupLogger };
+export async function readBackupLogs(backupId: string): Promise<string> {
+  const logFilePath = path.join(process.cwd(), "logs", `backup_${backupId}.log`);
+  try {
+    return fs.readFileSync(logFilePath, "utf8");
+  } catch (error) {
+    console.error(`Failed to read log file: ${(error as Error).message}`);
+    return "Failed to fetch backup logs.";
+  }
+}

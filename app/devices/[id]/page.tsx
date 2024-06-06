@@ -47,8 +47,9 @@ export default async function DevicePage({ params: { id } }: { params: { id: str
   );
 }
 
-import { ArrowDownTrayIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { ArrowDownTrayIcon } from "@heroicons/react/16/solid";
 import { DeleteBackupForm } from "@/components/backup/delete";
+import BackupLogsButton from "@/components/backup/logs";
 
 async function RecentBackups({ deviceId }: { deviceId: number }) {
   const backups = await getDeviceBackups(deviceId);
@@ -69,13 +70,10 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
           {backups.map((backup) => (
             <TableRow key={backup.id}>
               <TableCell className="font-medium">{backup.status}</TableCell>
-              <TableCell>
-                <Link href={`/devices/${backup.id}`}>
-                  {backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}
-                </Link>
-              </TableCell>
+              <TableCell>{backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}</TableCell>
               <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>
               <TableCell className="gap-2 flex">
+                <BackupLogsButton backup={backup} />
                 <Button outline title="Download">
                   <ArrowDownTrayIcon />
                 </Button>

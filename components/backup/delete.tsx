@@ -17,10 +17,7 @@ export function DeleteBackupForm({ backup }: { backup: Backup }) {
 }
 
 export function DeleteBackupButton() {
-  const formState = useFormStatus();
-
-  console.log(formState);
-  const { pending } = formState;
+  const { pending } = useFormStatus();
 
   return (
     <Button aria-disabled={pending} color="red" type="submit">
