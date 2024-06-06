@@ -22,6 +22,7 @@ const agent = new https.Agent({
 });
 
 export class OPNSenseBackupRunner implements BackupRunner {
+  //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
   async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
     const logger = await createBackupLogger(backup.id);
     let success = false;

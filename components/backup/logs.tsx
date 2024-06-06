@@ -65,7 +65,9 @@ const Logs = ({ logLines }: { logLines: string }) => {
   return (
     <div>
       {logLines.split("\n").map((line, index) => (
-        <p key={index}>{line}</p>
+        <p key={index} className={line.split(" ")[2]?.includes("error:") ? "text-red-500" : ""}>
+          {line}
+        </p>
       ))}
     </div>
   );

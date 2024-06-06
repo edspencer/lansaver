@@ -11,6 +11,8 @@ import Link from "next/link";
 
 import { getDevice, getDeviceBackups } from "@/app/models/device";
 
+import type { Backup } from "@prisma/client";
+
 export default async function DevicePage({ params: { id } }: { params: { id: string } }) {
   const device = await getDevice(parseInt(id, 10));
 
@@ -47,7 +49,7 @@ export default async function DevicePage({ params: { id } }: { params: { id: str
   );
 }
 
-import { ArrowDownTrayIcon } from "@heroicons/react/16/solid";
+import { ArrowDownTrayIcon, ArrowPathIcon } from "@heroicons/react/16/solid";
 import { DeleteBackupForm } from "@/components/backup/delete";
 import BackupLogsButton from "@/components/backup/logs";
 
@@ -57,34 +59,55 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
   return (
     <div className="pt-6">
       <Subheading className="mb-4">Recent Backups</Subheading>
-      <Table>
+      <Table dense>
         <TableHead>
           <TableRow>
             <TableHeader>ID</TableHeader>
             <TableHeader>Status</TableHeader>
             <TableHeader>Date</TableHeader>
             <TableHeader>Size</TableHeader>
-            <TableHeader>Actions</TableHeader>
+            <TableHeader className="text-right">Actions</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
           {backups.map((backup) => (
-            <TableRow key={backup.id}>
-              <TableCell>{backup.id}</TableCell>
-              <TableCell className="font-medium">{backup.status}</TableCell>
-              <TableCell>{backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}</TableCell>
-              <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>
-              <TableCell className="gap-2 flex">
-                <BackupLogsButton backup={backup} />
-                <Button outline title="Download">
-                  <ArrowDownTrayIcon />
-                </Button>
-                <DeleteBackupForm backup={backup} />
-              </TableCell>
-            </TableRow>
+            <BackupRow backup={backup} />
           ))}
         </TableBody>
       </Table>
     </div>
   );
 }
+
+const RetryButton = () => {
+  return (
+    <Button outline title="Retry">
+      <ArrowPathIcon />
+    </Button>
+  );
+};
+
+const DownloadButton = () => {
+  return (
+    <Button outline title="Download">
+      <ArrowDownTrayIcon />
+    </Button>
+  );
+};
+
+const BackupRow = ({ backup }: { backup: Backup }) => {
+  return (
+    <TableRow key={backup.id} className={backup.status === "failed" ? "bg-red-100" : ""}>
+      <TableCell>{backup.id}</TableCell>
+      <TableCell className="font-medium">{backup.status}</TableCell>
+      <TableCell>{backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}</TableCell>
+      <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>
+      <TableCell className="gap-2 flex justify-end">
+        {backup.status === "failed" && <RetryButton />}
+        {backup.status === "completed" && <DownloadButton />}
+        <BackupLogsButton backup={backup} />
+        <DeleteBackupForm backup={backup} />
+      </TableCell>
+    </TableRow>
+  );
+};
