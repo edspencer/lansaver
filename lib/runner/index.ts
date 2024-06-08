@@ -1,5 +1,6 @@
 import type { Device, Backup } from "@prisma/client";
 import { OPNSenseBackupRunner } from "./opnsense";
+import { HomeAssistantRunner } from "./hass";
 
 export interface BackupRunner {
   startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome>;
@@ -20,6 +21,8 @@ export class BackupRunnerFactory {
     switch (type) {
       case "opnsense":
         return new OPNSenseBackupRunner();
+      case "hass":
+        return new HomeAssistantRunner();
       default:
         throw new Error(`Unsupported backup type: ${type}`);
     }

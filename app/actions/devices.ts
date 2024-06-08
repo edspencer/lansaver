@@ -25,7 +25,7 @@ export async function updateDeviceAction(formData: FormData): Promise<CreateDevi
       id: Number(formData.get("id")),
       type: formData.get("type") as string,
       hostname: formData.get("hostname") as string,
-      credentials: formData.get("credentials") as string,
+      config: formData.get("config") as string,
     };
 
     console.log("updating device");
@@ -69,7 +69,7 @@ export async function createDeviceAction(prevState: any, formData: FormData): Pr
     const data = {
       type: formData.get("type"),
       hostname: formData.get("hostname"),
-      credentials: formData.get("credentials"),
+      config: formData.get("config"),
     } as Prisma.DeviceCreateInput;
 
     console.log(data);

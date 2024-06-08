@@ -3,7 +3,6 @@
 import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../../components/table";
 import { Heading } from "../../components/heading";
 import { Button } from "../../components/button";
-import { Link } from "../../components/link";
 import type { Device } from "@prisma/client";
 import useSWR from "swr";
 
@@ -46,11 +45,9 @@ function DevicesTable({ devices }: { devices: Device[] }) {
       </TableHead>
       <TableBody>
         {devices.map((device) => (
-          <TableRow key={device.id}>
+          <TableRow key={device.id} href={`/devices/${device.id}`}>
             <TableCell className="font-medium">{device.type}</TableCell>
-            <TableCell>
-              <Link href={`/devices/${device.id}`}>{device.hostname}</Link>
-            </TableCell>
+            <TableCell>{device.hostname}</TableCell>
             <TableCell className="text-zinc-500">{device.hostname}</TableCell>
           </TableRow>
         ))}

@@ -1,5 +1,3 @@
-"use server";
-
 import { createLogger, format, transports } from "winston";
 import path from "path";
 import fs from "fs";
@@ -9,7 +7,7 @@ const logDirectory = process.env.LOGS_DIRECTORY || path.join(process.cwd(), "log
 fs.mkdirSync(logDirectory, { recursive: true });
 
 export const createBackupLogger = (backupId: number) => {
-  const logFilePath = path.join(logDirectory, `backup_${backupId}.log`);
+  const logFilePath = logLocationForBackup(backupId);
 
   return createLogger({
     level: "info",
@@ -20,6 +18,10 @@ export const createBackupLogger = (backupId: number) => {
     transports: [new transports.Console(), new transports.File({ filename: logFilePath })],
   });
 };
+
+export function logLocationForBackup(backupId: number) {
+  return path.join(logDirectory, `backup_${backupId}.log`);
+}
 
 export async function getBackupLogs(backupId: string): Promise<string> {
   const logFilePath = path.join(process.cwd(), "logs", `backup_${backupId}.log`);

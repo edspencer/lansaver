@@ -1,10 +1,8 @@
 import { OPNSenseBackupRunner } from "../../lib/runner/opnsense";
 import { BackupOutcome } from "../../lib/runner";
-import { Device, Backup } from "@prisma/client";
+import type { Device, Backup } from "@prisma/client";
 import fetch from "node-fetch";
 import fs from "fs";
-import path from "path";
-// import { createBackupLogger } from "@/lib/logger";
 
 jest.mock("../../lib/runner/logger", () => ({
   createBackupLogger: jest.fn().mockResolvedValue({
@@ -39,6 +37,7 @@ describe("OPNSenseBackupRunner", () => {
       hostname: "test-opnsense.local",
       credentials: JSON.stringify({ API_KEY: "test-api-key", API_SECRET: "test-api-secret" }),
       type: "OPNSense",
+      config: "",
     };
     backup = {
       id: 1,

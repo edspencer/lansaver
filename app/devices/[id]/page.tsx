@@ -71,7 +71,7 @@ async function RecentBackups({ deviceId }: { deviceId: number }) {
         </TableHead>
         <TableBody>
           {backups.map((backup) => (
-            <BackupRow backup={backup} />
+            <BackupRow key={backup.id} backup={backup} />
           ))}
         </TableBody>
       </Table>

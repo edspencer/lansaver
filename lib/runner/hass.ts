@@ -16,45 +16,49 @@ try {
   console.error(`Failed to create backup directory: ${error.message}`);
 }
 
-// Disable SSL verification because OPNSense usually uses a self-signed certificates
+// Disable SSL verification because Home Assistant usually uses a self-signed certificates
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-export class OPNSenseBackupRunner implements BackupRunner {
+export class HomeAssistantRunner implements BackupRunner {
   //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
   async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
     const logger = await createBackupLogger(backup.id);
     let success = false;
     let bytes = 0;
-    let responseText = null;
+    let backupData = null;
     let error = null;
 
     try {
-      logger.info("Starting OPNSense backup");
+      logger.info("Starting Home Assistant backup");
 
       const { hostname, config = null } = device;
       const { API_KEY, API_SECRET } = JSON.parse(config || "{}");
 
-      const backupUrl = `https://${hostname}/api/core/backup/download/this`;
+      const backupUrl = `https://${hostname}:3000/backup`;
 
-      logger.info(`Fetching from ${backupUrl}`);
+      logger.info(`POSTing to ${backupUrl}`);
 
       const res = await fetch(backupUrl, {
         agent,
-        method: "GET",
+        method: "POST",
         headers: {
-          Authorization: `Basic ${Buffer.from(`${API_KEY}:${API_SECRET}`).toString("base64")}`,
+          Authorization: `Bearer ${API_KEY}`,
         },
       });
 
-      logger.info(`OPNSense responded with status code ${res.status}`);
+      logger.info(`Home Assistant responded with status code ${res.status}`);
 
       if (res.ok) {
         try {
-          responseText = await res.text();
-          bytes = responseText.length;
-          logger.info(`OPNSense backup file size: ${bytes}`);
+          backupData = await res.json();
+
+          logger.info(res);
+          logger.info(backupData);
+
+          // bytes = backupData.length;
+          logger.info(`Home Assistant backup creation response: ${JSON.stringify(backupData)}`);
         } catch (textError: any) {
           logger.error(`Failed to read response text: ${textError.message}`);
           error = textError;
@@ -67,19 +71,19 @@ export class OPNSenseBackupRunner implements BackupRunner {
       error = fetchError;
     }
 
-    if (responseText) {
-      try {
-        const filePath = path.join(backupDirectory, `${backup.id}.xml`);
-        logger.info(`Writing backup to ${filePath}`);
+    // if (responseText) {
+    //   try {
+    //     const filePath = path.join(backupDirectory, `${backup.id}.xml`);
+    //     logger.info(`Writing backup to ${filePath}`);
 
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, responseText);
-        success = true;
-      } catch (writeError: any) {
-        logger.error(`Failed to write backup: ${writeError.message}`);
-        error = writeError;
-      }
-    }
+    //     fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    //     fs.writeFileSync(filePath, responseText);
+    //     success = true;
+    //   } catch (writeError: any) {
+    //     logger.error(`Failed to write backup: ${writeError.message}`);
+    //     error = writeError;
+    //   }
+    // }
 
     return {
       success,

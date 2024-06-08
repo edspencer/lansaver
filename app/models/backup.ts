@@ -1,9 +1,9 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-
-import { DeviceSchema } from "@/app/validation";
+import { PrismaClient } from "@prisma/client";
 import { getDevice } from "./device";
+import { BackupRunnerFactory } from "../../lib/runner";
+import { logLocationForBackup } from "../../lib/runner/logger";
 
-import { BackupRunnerFactory } from "@/lib/runner";
+import fs from "fs";
 
 const prisma = new PrismaClient();
 
@@ -43,6 +43,18 @@ export async function createBackupForDeviceId(deviceId: number) {
 }
 
 export async function deleteBackup(id: number) {
+  //delete the log file
+  const logFilePath = logLocationForBackup(id);
+  try {
+    fs.unlinkSync(logFilePath);
+    console.log(`Deleted log file for backup ${id}`);
+  } catch (e) {
+    console.error(`Failed to delete log file for backup ${id}}`);
+    console.error(e);
+  }
+
+  //delete the backup files
+
   return await prisma.backup.delete({ where: { id } });
 }
 

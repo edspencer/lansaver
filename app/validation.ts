@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 export const DeviceSchema = z.object({
   type: z.string(),
   hostname: z.string().min(2),
-  credentials: z.string(),
+  config: z.string(),
 }) satisfies z.ZodType<Prisma.DeviceCreateInput>;
 
 export const BackupSchema = z.object({

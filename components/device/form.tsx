@@ -5,6 +5,7 @@ import { SubmitButton } from "@/components/device/buttons";
 import { Input } from "@/components/input";
 import { Select } from "@/components/select";
 import { Field, Label, Description } from "@/components/fieldset";
+import { Textarea } from "../textarea";
 
 export default function DeviceForm({ device, formAction }: { device?: Device; formAction: any }) {
   return (
@@ -23,9 +24,9 @@ export default function DeviceForm({ device, formAction }: { device?: Device; fo
         <Input name="hostname" placeholder="http://192.168.1.1" defaultValue={device?.hostname} />
       </Field>
       <Field>
-        <Label>Credentials</Label>
+        <Label>Config</Label>
         <Description>This makes no sense</Description>
-        <Input name="credentials" placeholder="okcool" defaultValue={device?.credentials} />
+        <Textarea name="config" placeholder="okcool" defaultValue={device?.config} />
       </Field>
       <div className="flex justify-end">
         {device && <input type="hidden" name="id" value={device.id} />}
