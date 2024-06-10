@@ -1,20 +1,9 @@
 import type { Device, Backup } from "@prisma/client";
-import { BackupOutcome, BackupRunner } from "./index";
+import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import { createBackupLogger } from "./logger";
-
-const fs = require("fs");
-const path = require("path");
-
-const backupDirectory = process.env.BACKUP_DIRECTORY || path.join(process.cwd(), "backups");
-
-// Create backups directory if it doesn't exist
-try {
-  fs.mkdirSync(backupDirectory, { recursive: true });
-} catch (error: any) {
-  console.error(`Failed to create backup directory: ${error.message}`);
-}
+import BackupSaver from "./saver";
+import { Actor } from "xstate";
 
 // Disable SSL verification because OPNSense usually uses a self-signed certificates
 const agent = new https.Agent({
@@ -22,13 +11,23 @@ const agent = new https.Agent({
 });
 
 export class OPNSenseBackupRunner implements BackupRunner {
-  //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
-  async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
-    const logger = await createBackupLogger(backup.id);
-    let success = false;
-    let bytes = 0;
+  async startBackup({
+    device,
+    backup,
+    logger,
+    backupActor,
+    updateBackup,
+    fileSaver,
+  }: {
+    device: Device;
+    backup: Backup;
+    logger: any;
+    backupActor: Actor<any>;
+    updateBackup: any;
+    fileSaver: BackupSaver;
+  }): Promise<Backup> {
     let responseText = null;
-    let error = null;
+    backupActor.send({ type: "START" });
 
     try {
       logger.info("Starting OPNSense backup");
@@ -53,38 +52,35 @@ export class OPNSenseBackupRunner implements BackupRunner {
       if (res.ok) {
         try {
           responseText = await res.text();
-          bytes = responseText.length;
+          const bytes = responseText.length;
           logger.info(`OPNSense backup file size: ${bytes}`);
+          await updateBackup(backup.id, { bytes });
         } catch (textError: any) {
           logger.error(`Failed to read response text: ${textError.message}`);
-          error = textError;
+          backupActor.send({ type: "FAIL" });
         }
       } else {
         logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+        backupActor.send({ type: "FAIL" });
       }
     } catch (fetchError: any) {
       logger.error(`Failed to fetch backup: ${fetchError.message}`);
-      error = fetchError;
+      backupActor.send({ type: "FAIL" });
     }
 
     if (responseText) {
       try {
-        const filePath = path.join(backupDirectory, `${backup.id}.xml`);
-        logger.info(`Writing backup to ${filePath}`);
+        const filename = `${backup.id}.xml`;
+        logger.info(`Writing backup to ${filename}`);
+        await fileSaver.save(filename, responseText);
 
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, responseText);
-        success = true;
+        backupActor.send({ type: "COMPLETE" });
       } catch (writeError: any) {
         logger.error(`Failed to write backup: ${writeError.message}`);
-        error = writeError;
+        backupActor.send({ type: "FAIL" });
       }
     }
 
-    return {
-      success,
-      bytes,
-      error,
-    };
+    return backup;
   }
 }

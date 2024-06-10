@@ -1,9 +1,32 @@
 import type { Device, Backup } from "@prisma/client";
 import { OPNSenseBackupRunner } from "./opnsense";
 import { HomeAssistantRunner } from "./hass";
+import { createBackupLogger } from "./logger";
+import BackupSaver from "./saver";
+
+import type { Actor } from "xstate";
+import type { Logger } from "winston";
+import path from "path";
+
+import { BackupState, backupMachine, updateBackup } from "../../app/models/backup";
+import { createActor } from "xstate";
 
 export interface BackupRunner {
-  startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome>;
+  startBackup({
+    device,
+    backup,
+    logger,
+    backupActor,
+    updateBackup,
+    fileSaver,
+  }: {
+    device: Device;
+    backup: Backup;
+    logger: Logger;
+    backupActor: Actor<any>;
+    updateBackup: any;
+    fileSaver: BackupSaver;
+  }): Promise<Backup>;
 }
 
 /**
@@ -40,15 +63,30 @@ export class BackupRunnerFactory {
     return this.runners[type];
   }
 
-  // convenience method to start a backup without creating a runner
-  static startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
-    return this.createMemoizedBackupRunner(device.type).startBackup({ device, backup });
+  // convenience method to start a backup without creating a runner, logger etc
+  static async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<Backup> {
+    const logger = await createBackupLogger(backup.id);
+
+    //initiate our state machine, persist state changes to the database
+    const backupActor = createActor(backupMachine);
+    backupActor.subscribe(async (state) => {
+      logger.info(`Backup state: ${state.value}`);
+
+      //update the backup status in the database
+      await updateBackup(backup.id, { status: state.value as BackupState });
+    });
+
+    backupActor.start();
+
+    const fileSaver = new BackupSaver(process.env.BACKUP_DIRECTORY || path.join(process.cwd(), "backups"));
+
+    return this.createMemoizedBackupRunner(device.type).startBackup({
+      device,
+      backup,
+      logger,
+      backupActor,
+      updateBackup,
+      fileSaver,
+    });
   }
 }
-
-//represents the outcome of any given backup operation
-export type BackupOutcome = {
-  success: boolean;
-  error?: any;
-  bytes: number;
-};

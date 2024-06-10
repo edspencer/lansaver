@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 
-import { DeviceSchema } from "@/app/validation";
+import { DeviceSchema } from "../validation";
 
 const prisma = new PrismaClient();
 

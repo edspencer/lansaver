@@ -85,12 +85,15 @@ model Device {
   credentials String?
   config      String @default("{}") // Representation of configuration as JSON
   backups     Backup[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Backup {
   id         Int      @id @default(autoincrement())
   deviceId   Int
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   status     String
   bytes      Int?
   device     Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
@@ -102,17 +105,22 @@ model Schedule {
   cron      String
   name      String
   jobs      Job[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Destination {
   id          Int      @id @default(autoincrement())
   type        String
   details     String // Representation of configuration/credentials as JSON
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Job {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   startedAt  DateTime?
   finishedAt DateTime?
   status     String

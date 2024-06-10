@@ -1,94 +1,125 @@
 import type { Device, Backup } from "@prisma/client";
-import { BackupOutcome, BackupRunner } from "./index";
+import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import { createBackupLogger } from "./logger";
-
-const fs = require("fs");
-const path = require("path");
-
-const backupDirectory = process.env.BACKUP_DIRECTORY || path.join(process.cwd(), "backups");
-
-// Create backups directory if it doesn't exist
-try {
-  fs.mkdirSync(backupDirectory, { recursive: true });
-} catch (error: any) {
-  console.error(`Failed to create backup directory: ${error.message}`);
-}
+import BackupSaver from "./saver";
 
 // Disable SSL verification because Home Assistant usually uses a self-signed certificates
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
+/**
+ * Downloads the backup from Home Assistant and saves it to a file.
+ */
+function downloadBackup({
+  device,
+  backup,
+  backupActor,
+  logger,
+  slug,
+  updateBackup,
+  fileSaver,
+}: {
+  device: Device;
+  backup: Backup;
+  backupActor: any;
+  logger: any;
+  slug: string;
+  updateBackup: any;
+  fileSaver: BackupSaver;
+}) {
+  const { hostname, config = null } = device;
+  const { API_KEY, API_SECRET } = JSON.parse(config || "{}");
+
+  const downloadUrl = `https://${hostname}:3000/backup/${slug}/download`;
+
+  logger.info(`Downloading backup from ${downloadUrl}`);
+
+  fetch(downloadUrl, {
+    agent,
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  }).then(async (res) => {
+    logger.info(`Home Assistant responded with status code ${res.status}`);
+
+    if (res.ok) {
+      let responseText = await res.text();
+
+      if (responseText) {
+        try {
+          const filename = `${backup.id}.tar`;
+          logger.info(`Writing backup to ${filename}`);
+          await fileSaver.save(filename, responseText);
+          const bytes = await fileSaver.size(filename);
+
+          await updateBackup(backup.id, { bytes });
+          backupActor.send({ type: "COMPLETE" });
+        } catch (writeError: any) {
+          logger.error(`Failed to write backup: ${writeError.message}`);
+          backupActor.send({ type: "FAIL" });
+        }
+      }
+    } else {
+      logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+      backupActor.send({ type: "FAIL" });
+    }
+  });
+}
+
 export class HomeAssistantRunner implements BackupRunner {
   //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
-  async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<BackupOutcome> {
-    const logger = await createBackupLogger(backup.id);
-    let success = false;
-    let bytes = 0;
-    let backupData = null;
-    let error = null;
+  async startBackup({
+    device,
+    backup,
+    logger,
+    backupActor,
+    updateBackup,
+    fileSaver,
+  }: {
+    device: Device;
+    backup: Backup;
+    logger: any;
+    backupActor: any;
+    updateBackup: any;
+    fileSaver: BackupSaver;
+  }): Promise<Backup> {
+    logger.info("Starting Home Assistant backup");
+    backupActor.send({ type: "START" });
 
-    try {
-      logger.info("Starting Home Assistant backup");
+    const { hostname, config = null } = device;
+    const { API_KEY } = JSON.parse(config || "{}");
 
-      const { hostname, config = null } = device;
-      const { API_KEY, API_SECRET } = JSON.parse(config || "{}");
+    const backupUrl = `https://${hostname}:3000/backup`;
 
-      const backupUrl = `https://${hostname}:3000/backup`;
+    logger.info(`POSTing to ${backupUrl}`);
 
-      logger.info(`POSTing to ${backupUrl}`);
-
-      const res = await fetch(backupUrl, {
-        agent,
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-        },
-      });
-
+    /*
+     * Kicks off the backup process by sending a POST request to the Home Assistant API. This can
+     * take a minute, so we don't wait for the response here.
+     */
+    fetch(backupUrl, {
+      agent,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    }).then((res) => {
       logger.info(`Home Assistant responded with status code ${res.status}`);
-
       if (res.ok) {
-        try {
-          backupData = await res.json();
-
-          logger.info(res);
-          logger.info(backupData);
-
-          // bytes = backupData.length;
+        res.json().then((backupData) => {
+          const { slug } = backupData.data;
           logger.info(`Home Assistant backup creation response: ${JSON.stringify(backupData)}`);
-        } catch (textError: any) {
-          logger.error(`Failed to read response text: ${textError.message}`);
-          error = textError;
-        }
+
+          downloadBackup({ device, backup, backupActor, logger, slug, updateBackup, fileSaver });
+        });
       } else {
         logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+        backupActor.send({ type: "FAIL" });
       }
-    } catch (fetchError: any) {
-      logger.error(`Failed to fetch backup: ${fetchError.message}`);
-      error = fetchError;
-    }
+    });
 
-    // if (responseText) {
-    //   try {
-    //     const filePath = path.join(backupDirectory, `${backup.id}.xml`);
-    //     logger.info(`Writing backup to ${filePath}`);
-
-    //     fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    //     fs.writeFileSync(filePath, responseText);
-    //     success = true;
-    //   } catch (writeError: any) {
-    //     logger.error(`Failed to write backup: ${writeError.message}`);
-    //     error = writeError;
-    //   }
-    // }
-
-    return {
-      success,
-      bytes,
-      error,
-    };
+    return backup;
   }
 }

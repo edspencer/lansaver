@@ -71,6 +71,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(device, { status: 200 });
     } else {
       const devices = await prisma.device.findMany();
+
       return NextResponse.json(devices, { status: 200 });
     }
   } catch (error) {

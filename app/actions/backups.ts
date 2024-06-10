@@ -15,9 +15,6 @@ export async function backupDeviceAction(id: number) {
 
   revalidatePath(`/devices/${id}`);
 
-  //wait for 3 seconds
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
   return {
     success: true,
     message: "Backup Created Successfully",
