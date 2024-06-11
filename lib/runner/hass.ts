@@ -30,7 +30,7 @@ function downloadBackup({
   fileSaver: BackupSaver;
 }) {
   const { hostname, config = null } = device;
-  const { API_KEY, API_SECRET } = JSON.parse(config || "{}");
+  const { API_KEY } = JSON.parse(config || "{}");
 
   const downloadUrl = `https://${hostname}:3000/backup/${slug}/download`;
 

@@ -1,6 +1,7 @@
 import type { Device, Backup } from "@prisma/client";
 import { OPNSenseBackupRunner } from "./opnsense";
 import { HomeAssistantRunner } from "./hass";
+import { TPLinkRunner } from "./tplink";
 import { createBackupLogger } from "./logger";
 import BackupSaver from "./saver";
 
@@ -46,6 +47,8 @@ export class BackupRunnerFactory {
         return new OPNSenseBackupRunner();
       case "hass":
         return new HomeAssistantRunner();
+      case "tplink":
+        return new TPLinkRunner();
       default:
         throw new Error(`Unsupported backup type: ${type}`);
     }
