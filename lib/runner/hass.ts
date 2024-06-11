@@ -105,20 +105,24 @@ export class HomeAssistantRunner implements BackupRunner {
       headers: {
         Authorization: `Bearer ${API_KEY}`,
       },
-    }).then((res) => {
-      logger.info(`Home Assistant responded with status code ${res.status}`);
-      if (res.ok) {
-        res.json().then((backupData) => {
+    })
+      .then(async (res) => {
+        logger.info(`Home Assistant responded with status code ${res.status}`);
+        if (res.ok) {
+          const backupData = await res.json();
           const { slug } = backupData.data;
           logger.info(`Home Assistant backup creation response: ${JSON.stringify(backupData)}`);
 
-          downloadBackup({ device, backup, backupActor, logger, slug, updateBackup, fileSaver });
-        });
-      } else {
-        logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+          await downloadBackup({ device, backup, backupActor, logger, slug, updateBackup, fileSaver });
+        } else {
+          logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+          backupActor.send({ type: "FAIL" });
+        }
+      })
+      .catch((err) => {
+        logger.error(`Failed to fetch backup: ${err.message}`);
         backupActor.send({ type: "FAIL" });
-      }
-    });
+      });
 
     return backup;
   }

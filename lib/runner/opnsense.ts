@@ -23,7 +23,7 @@ export class OPNSenseBackupRunner implements BackupRunner {
     backup: Backup;
     logger: any;
     backupActor: Actor<any>;
-    updateBackup: any;
+    updateBackup: Function;
     fileSaver: BackupSaver;
   }): Promise<Backup> {
     let responseText = null;
@@ -54,9 +54,15 @@ export class OPNSenseBackupRunner implements BackupRunner {
           responseText = await res.text();
           const bytes = responseText.length;
           logger.info(`OPNSense backup file size: ${bytes}`);
+
+          const filename = `${backup.id}.xml`;
+          logger.info(`Writing backup to ${filename}`);
+          await fileSaver.save(filename, responseText);
+
           await updateBackup(backup.id, { bytes });
-        } catch (textError: any) {
-          logger.error(`Failed to read response text: ${textError.message}`);
+          backupActor.send({ type: "COMPLETE" });
+        } catch (writeError: any) {
+          logger.error(`Failed to write backup: ${writeError.message}`);
           backupActor.send({ type: "FAIL" });
         }
       } else {
@@ -66,19 +72,6 @@ export class OPNSenseBackupRunner implements BackupRunner {
     } catch (fetchError: any) {
       logger.error(`Failed to fetch backup: ${fetchError.message}`);
       backupActor.send({ type: "FAIL" });
-    }
-
-    if (responseText) {
-      try {
-        const filename = `${backup.id}.xml`;
-        logger.info(`Writing backup to ${filename}`);
-        await fileSaver.save(filename, responseText);
-
-        backupActor.send({ type: "COMPLETE" });
-      } catch (writeError: any) {
-        logger.error(`Failed to write backup: ${writeError.message}`);
-        backupActor.send({ type: "FAIL" });
-      }
     }
 
     return backup;
