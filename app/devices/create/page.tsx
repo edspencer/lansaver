@@ -24,13 +24,13 @@ const initialState = {
 export default function CreateDevice() {
   return (
     <>
-      <CreateDeviceAction />
+      <CreateDeviceUsingAction />
       <CreateDeviceAPI />
     </>
   );
 }
 
-export function CreateDeviceAction() {
+function CreateDeviceUsingAction() {
   const [state, formAction] = useFormState(createDeviceAction, initialState);
 
   return (
@@ -50,7 +50,7 @@ export function CreateDeviceAction() {
   );
 }
 
-export function CreateDeviceAPI() {
+function CreateDeviceAPI() {
   //clone the initialState object into a new object
   // const state = { ...initialState } as CreateDeviceAction;
   const [state, setState] = useState({ ...initialState });
