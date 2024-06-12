@@ -64,7 +64,7 @@ async function destroySession({ hostname, logger, authToken }: { hostname: strin
 
   const logoutUrl = `http://${hostname}/data/logout.json`;
 
-  logger.info(`Logging out via from ${logoutUrl}`);
+  logger.info(`Logging out via ${logoutUrl}`);
 
   let logoutRes;
   try {
@@ -147,9 +147,3 @@ export class TPLinkRunner implements BackupRunner {
     return backup;
   }
 }
-
-// http://masterclosetswitch.local/data/sysConfigBackup.cfg?operation=write&unit_id=0&_tid_=215350319add6a45&usrLvl=3
-
-// curl -v "http://masterclosetswitch.local/data/sysConfigBackup.cfg?operation=write&unit_id=0&_tid_=5e8fa4650ea64e55&usrLvl=3"
-
-// curl -v -X POST --data '{"username": "admin", "password": "stupidfathobbit", "operation": "write"}' "http://masterclosetswitch.local/data/login.json"

@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
 
 import { ZodError } from "zod";
-import { createDevice } from "@/app/models/device";
+import { createDevice, getDevice, getDevices } from "@/app/models/device";
 import { revalidatePath } from "next/cache";
+import { decrypt } from "@/lib/crypto";
 
 const prisma = new PrismaClient();
 
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
       type: body.type,
       hostname: body.hostname,
       credentials: body.credentials,
+      config: body.config,
     } as Prisma.DeviceCreateInput;
     const device = await createDevice(data);
 
@@ -60,9 +62,7 @@ export async function GET(req: NextRequest) {
     const id = searchParams.get("id");
 
     if (id) {
-      const device = await prisma.device.findUnique({
-        where: { id: parseInt(id, 10) },
-      });
+      const device = await getDevice(parseInt(id, 10));
 
       if (!device) {
         return NextResponse.json({ error: "Device not found" }, { status: 404 });
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(device, { status: 200 });
     } else {
-      const devices = await prisma.device.findMany();
+      const devices = await getDevices();
 
       return NextResponse.json(devices, { status: 200 });
     }

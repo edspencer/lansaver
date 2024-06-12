@@ -15,25 +15,30 @@ export type CreateDeviceAction = {
   error?: any;
 };
 
+//returns nested form data e.g. credentials[API_KEY]
+function getGroupedFormData(formData: FormData, key: string) {
+  const groupData: { [key: string]: any } = {};
+
+  formData.forEach((value, dataKey) => {
+    const [groupName, fieldName] = dataKey.split("[").map((str) => str.replace("]", ""));
+
+    if (groupName === key) {
+      groupData[fieldName] = value;
+    }
+  });
+
+  return groupData;
+}
+
 export async function updateDeviceAction(formData: FormData): Promise<CreateDeviceAction> {
   try {
     console.log("updateDeviceAction");
-    console.log(formData);
-    // console.log(prevState);
 
-    const data = {
-      id: Number(formData.get("id")),
-      type: formData.get("type") as string,
-      hostname: formData.get("hostname") as string,
-      config: formData.get("config") as string,
-    };
+    const id = Number(formData.get("id"));
+    const data = getDeviceDataFromFormData(formData);
+    await updateDevice(id, data);
 
-    console.log("updating device");
-    console.log(data);
-
-    const device = await updateDevice(data.id, data);
-
-    revalidatePath(`/devices/${data.id}`);
+    revalidatePath(`/devices/${id}`);
   } catch (error) {
     console.log(`zod error: ${error instanceof ZodError}`);
     console.log(error);
@@ -56,24 +61,25 @@ export async function updateDeviceAction(formData: FormData): Promise<CreateDevi
   }
 
   redirect(`/devices/${formData.get("id")}`);
+}
 
-  // return {
-  //   success: true,
-  //   message: "Device Updated Successfully",
-  //   device,
-  // };
+function getDeviceDataFromFormData(formData: FormData): Prisma.DeviceCreateInput {
+  const credentials = getGroupedFormData(formData, "credentials");
+  const config = getGroupedFormData(formData, "config");
+
+  return {
+    type: formData.get("type") as string,
+    hostname: formData.get("hostname") as string,
+    config: JSON.stringify(config),
+    credentials: JSON.stringify(credentials),
+  };
 }
 
 export async function createDeviceAction(prevState: any, formData: FormData): Promise<CreateDeviceAction> {
   try {
-    const data = {
-      type: formData.get("type"),
-      hostname: formData.get("hostname"),
-      config: formData.get("config"),
-    } as Prisma.DeviceCreateInput;
+    console.log("createDeviceAction");
 
-    console.log(data);
-
+    const data = getDeviceDataFromFormData(formData);
     const device = await createDevice(data);
 
     revalidatePath("/devices");

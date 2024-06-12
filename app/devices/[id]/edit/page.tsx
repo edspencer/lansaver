@@ -5,13 +5,12 @@ import { PrismaClient } from "@prisma/client";
 import { notFound } from "next/navigation";
 import DeviceForm from "@/components/device/form";
 import { updateDeviceAction } from "@/app/actions/devices";
+import { getDevice } from "@/app/models/device";
 
 const prisma = new PrismaClient();
 
 export default async function EditDevicePage({ params: { id } }: { params: { id: string } }) {
-  const device = await prisma.device.findUnique({
-    where: { id: parseInt(id, 10) },
-  });
+  const device = await getDevice(Number(id));
 
   if (!device) {
     return notFound();

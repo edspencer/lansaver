@@ -82,7 +82,7 @@ model Device {
   id          Int      @id @default(autoincrement())
   type        String
   hostname    String
-  credentials String?
+  credentials String @default("{}")
   config      String @default("{}") // Representation of configuration as JSON
   backups     Backup[]
   createdAt  DateTime @default(now())

@@ -31,9 +31,6 @@ export async function deleteBackupAction(id: number) {
     if (backup !== null) {
       revalidatePath(`/devices/${backup.deviceId}`);
     }
-
-    //wait for 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 2000));
   } catch (e) {
     return {
       success: false,

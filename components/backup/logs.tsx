@@ -63,7 +63,7 @@ export default function BackupLogs({ backup }: { backup: Backup }) {
 
 const Logs = ({ logLines }: { logLines: string }) => {
   return (
-    <div>
+    <div className="font-mono text-sm">
       {logLines.split("\n").map((line, index) => (
         <p key={index} className={line.split(" ")[2]?.includes("error:") ? "text-red-500" : ""}>
           {line}
