@@ -2,6 +2,7 @@
 
 import { createBackupForDeviceId, deleteBackup, getBackup } from "@/models/backup";
 import { revalidatePath } from "next/cache";
+import { timeout } from "@/lib/timeout";
 
 //error conditions:
 // - id not supplied
@@ -11,14 +12,27 @@ import { revalidatePath } from "next/cache";
 export async function backupDeviceAction(id: number) {
   console.log(`backing up device ${id}`);
 
-  await createBackupForDeviceId(id);
+  //kick off the backup; if it takes more than 3 seconds we'll respond already
+  const jobPromise = createBackupForDeviceId(id);
+  const result = await Promise.race([jobPromise, timeout(3000)]);
 
+  //we want to revalidate whether the backup finished yet or not
   revalidatePath(`/devices/${id}`);
 
-  return {
-    success: true,
-    message: "Backup Created Successfully",
-  };
+  if (result === undefined) {
+    //job is still running after 3 seconds, so report back progress immediately
+    return {
+      success: true,
+      message: "Backup Started",
+    };
+  } else {
+    //job completed
+
+    return {
+      success: true,
+      message: "Backup Created Successfully",
+    };
+  }
 }
 
 export async function deleteBackupAction(id: number) {

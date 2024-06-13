@@ -12,7 +12,7 @@ const agent = new https.Agent({
 /**
  * Downloads the backup from Home Assistant and saves it to a file.
  */
-function downloadBackup({
+async function downloadBackup({
   device,
   backup,
   backupActor,
@@ -36,36 +36,36 @@ function downloadBackup({
 
   logger.info(`Downloading backup from ${downloadUrl}`);
 
-  fetch(downloadUrl, {
+  const res = await fetch(downloadUrl, {
     agent,
     headers: {
       Authorization: `Bearer ${API_KEY}`,
     },
-  }).then(async (res) => {
-    logger.info(`Home Assistant responded with status code ${res.status}`);
-
-    if (res.ok) {
-      let responseText = await res.text();
-
-      if (responseText) {
-        try {
-          const filename = `${backup.id}.tar`;
-          logger.info(`Writing backup to ${filename}`);
-          await fileSaver.save(filename, responseText);
-          const bytes = await fileSaver.size(filename);
-
-          await updateBackup(backup.id, { bytes });
-          backupActor.send({ type: "COMPLETE" });
-        } catch (writeError: any) {
-          logger.error(`Failed to write backup: ${writeError.message}`);
-          backupActor.send({ type: "FAIL" });
-        }
-      }
-    } else {
-      logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
-      backupActor.send({ type: "FAIL" });
-    }
   });
+
+  logger.info(`Home Assistant responded with status code ${res.status}`);
+
+  if (res.ok) {
+    let responseText = await res.text();
+
+    if (responseText) {
+      try {
+        const filename = `${backup.id}.tar`;
+        logger.info(`Writing backup to ${filename}`);
+        await fileSaver.save(filename, responseText);
+        const bytes = await fileSaver.size(filename);
+
+        await updateBackup(backup.id, { bytes });
+        backupActor.send({ type: "COMPLETE" });
+      } catch (writeError: any) {
+        logger.error(`Failed to write backup: ${writeError.message}`);
+        backupActor.send({ type: "FAIL" });
+      }
+    }
+  } else {
+    logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+    backupActor.send({ type: "FAIL" });
+  }
 }
 
 export class HomeAssistantRunner implements BackupRunner {
@@ -99,30 +99,30 @@ export class HomeAssistantRunner implements BackupRunner {
      * Kicks off the backup process by sending a POST request to the Home Assistant API. This can
      * take a minute, so we don't wait for the response here.
      */
-    fetch(backupUrl, {
-      agent,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    })
-      .then(async (res) => {
-        logger.info(`Home Assistant responded with status code ${res.status}`);
-        if (res.ok) {
-          const backupData = await res.json();
-          const { slug } = backupData.data;
-          logger.info(`Home Assistant backup creation response: ${JSON.stringify(backupData)}`);
-
-          await downloadBackup({ device, backup, backupActor, logger, slug, updateBackup, fileSaver });
-        } else {
-          logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
-          backupActor.send({ type: "FAIL" });
-        }
-      })
-      .catch((err) => {
-        logger.error(`Failed to fetch backup: ${err.message}`);
-        backupActor.send({ type: "FAIL" });
+    try {
+      const res = await fetch(backupUrl, {
+        agent,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+        },
       });
+
+      logger.info(`Home Assistant responded with status code ${res.status}`);
+      if (res.ok) {
+        const backupData = await res.json();
+        const { slug } = backupData.data;
+        logger.info(`Home Assistant backup creation response: ${JSON.stringify(backupData)}`);
+
+        await downloadBackup({ device, backup, backupActor, logger, slug, updateBackup, fileSaver });
+      } else {
+        logger.error(`Failed to fetch backup: ${res.statusText}. Status code was ${res.status}`);
+        backupActor.send({ type: "FAIL" });
+      }
+    } catch (err) {
+      logger.error(`Failed to fetch backup: ${err}`);
+      backupActor.send({ type: "FAIL" });
+    }
 
     return backup;
   }
