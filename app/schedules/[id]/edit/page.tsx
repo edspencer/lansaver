@@ -1,8 +1,16 @@
 import { getDevices } from "@/app/models/device";
-import CreateScheduleForm from "@/components/schedule/create-form";
+import { getSchedule } from "@/app/models/schedule";
+import EditScheduleForm from "@/components/schedule/edit-form";
 
-export default async function EditSchedulePage() {
+import { notFound } from "next/navigation";
+
+export default async function EditSchedulePage({ params: { id } }: { params: { id: string } }) {
+  const schedule = await getSchedule(Number(id));
+
+  if (!schedule) {
+    return notFound();
+  }
   const devices = await getDevices();
 
-  return <CreateScheduleForm devices={devices} />;
+  return <EditScheduleForm schedule={schedule} devices={devices} />;
 }

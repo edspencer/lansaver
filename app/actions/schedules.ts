@@ -26,11 +26,6 @@ export async function createScheduleAction(prevState: any, formData: FormData): 
   try {
     console.log("createScheduleAction");
 
-    console.log(formData);
-
-    console.log(formData.get("device"));
-    console.log(formData.getAll("device"));
-
     const data = getScheduleDataFromFormData(formData);
     const schedule = await createSchedule(data);
 
@@ -119,10 +114,12 @@ export async function deleteScheduleAction(id: number) {
     };
   }
 
-  return {
-    success: true,
-    message: "Schedule Deleted Successfully",
-  };
+  redirect("/schedules");
+
+  // return {
+  //   success: true,
+  //   message: "Schedule Deleted Successfully",
+  // };
 }
 
 export async function runScheduleAction(id: number) {

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import type { Device } from "@prisma/client";
 
 // import { DeviceSchema } from "../validation";
 
@@ -16,7 +17,7 @@ export async function createSchedule(data: Prisma.ScheduleCreateInput) {
   return await prisma.schedule.create({ data });
 }
 
-export async function getScheduleDevices(id: number) {
+export async function getScheduleDevices(id: number): Promise<Device[]> {
   const schedule = await getSchedule(id);
 
   if (!schedule) {
@@ -33,3 +34,5 @@ export async function updateSchedule(id: number, data: Prisma.ScheduleUpdateInpu
 export async function deleteSchedule(id: number) {
   return await prisma.schedule.delete({ where: { id } });
 }
+
+export async function runSchedule(id: number) {}

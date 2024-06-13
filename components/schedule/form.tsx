@@ -31,7 +31,7 @@ export default function ScheduleForm({
         </Description>
         <Input name="cron" placeholder="0 0 * * *" defaultValue={schedule?.name} />
       </Field>
-      <DevicesList devices={devices} />
+      <DevicesList schedule={schedule} devices={devices} />
       <div className="flex justify-end">
         {schedule && <input type="hidden" name="id" value={schedule.id} />}
         <SubmitButton />
@@ -50,7 +50,8 @@ function SubmitButton() {
   );
 }
 
-function DevicesList({ devices }: { devices: Device[] }) {
+function DevicesList({ schedule, devices }: { schedule?: Schedule; devices: Device[] }) {
+  const scheduleDevices = schedule ? schedule.devices?.split(",") : [];
   return (
     <Fieldset>
       <Legend>Devices</Legend>
@@ -58,7 +59,11 @@ function DevicesList({ devices }: { devices: Device[] }) {
       <CheckboxGroup>
         {devices.map((device) => (
           <CheckboxField key={device.id}>
-            <Checkbox name="device" value={String(device.id)} />
+            <Checkbox
+              name="device"
+              value={String(device.id)}
+              defaultChecked={scheduleDevices?.includes(String(device.id))}
+            />
             <Label>{device.hostname}</Label>
           </CheckboxField>
         ))}

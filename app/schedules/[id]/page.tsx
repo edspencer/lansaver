@@ -5,7 +5,6 @@ import { RunScheduleForm, DeleteScheduleButton } from "@/components/schedule/but
 import { Heading, Subheading } from "@/components/heading";
 import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
 import { Button } from "@/components/button";
-import Link from "next/link";
 import DevicesTable from "@/components/device/table";
 
 export default async function SchedulePage({ params: { id } }: { params: { id: string } }) {
@@ -38,11 +37,6 @@ export default async function SchedulePage({ params: { id } }: { params: { id: s
 
         <DescriptionTerm>Enabled</DescriptionTerm>
         <DescriptionDetails>{schedule.disabled}</DescriptionDetails>
-
-        <DescriptionTerm>Credentials</DescriptionTerm>
-        <DescriptionDetails>
-          <Link href={`/devices/${schedule.id}/credentials`}>View credentials</Link>
-        </DescriptionDetails>
       </DescriptionList>
       <Subheading className="mt-8 mb-2">Devices in this Schedule</Subheading>
       <DevicesTable devices={devices} />
