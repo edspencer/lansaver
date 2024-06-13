@@ -28,8 +28,8 @@ describe("TPLinkBackupRunner", () => {
       id: 1,
       type: "hass",
       hostname: "homeassistant.local",
-      config: JSON.stringify({ username, password }),
-      credentials: "{}",
+      credentials: JSON.stringify({ username, password }),
+      config: "{}",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -41,6 +41,7 @@ describe("TPLinkBackupRunner", () => {
       updatedAt: new Date(),
       status: "pending",
       bytes: 0,
+      jobId: null,
     };
 
     updateBackup = jest.fn();

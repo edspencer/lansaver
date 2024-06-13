@@ -27,7 +27,8 @@ export default function ScheduleForm({
       <Field>
         <Label>Cron</Label>
         <Description>
-          The cron string to use (Use <Link href="http://www.cronmaker.com/">cronmaker.com</Link> if you're not sure)
+          The cron string to use (Use <Link href="http://www.cronmaker.com/">cronmaker.com</Link> if you&apos;re not
+          sure)
         </Description>
         <Input name="cron" placeholder="0 0 * * *" defaultValue={schedule?.name} />
       </Field>

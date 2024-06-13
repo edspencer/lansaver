@@ -95,10 +95,6 @@ export class HomeAssistantRunner implements BackupRunner {
 
     logger.info(`POSTing to ${backupUrl}`);
 
-    /*
-     * Kicks off the backup process by sending a POST request to the Home Assistant API. This can
-     * take a minute, so we don't wait for the response here.
-     */
     try {
       const res = await fetch(backupUrl, {
         agent,

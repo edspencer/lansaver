@@ -1,8 +1,8 @@
 import { Backup, Prisma, PrismaClient } from "@prisma/client";
 import { getDevice } from "./device";
-import { BackupRunnerFactory } from "@/lib/runner/backup";
-import { logLocationForBackup } from "@/lib/runner/logger";
-import { BackupState } from "@/lib/stateMachines/backup";
+import { BackupRunnerFactory } from "../lib/runner/backup";
+import { logLocationForBackup } from "../lib/runner/logger";
+import { BackupState } from "../lib/stateMachines/backup";
 
 import fs from "fs";
 
@@ -17,25 +17,32 @@ export async function updateBackup(backupId: number, data: Prisma.BackupUpdateIn
   });
 }
 
-export async function createBackupForDeviceId(deviceId: number) {
+export async function createBackup(data: Prisma.BackupCreateInput) {
+  return await prisma.backup.create({ data });
+}
+
+export async function createBackupForDeviceId(deviceId: number, data?: Partial<Prisma.BackupCreateInput>) {
   console.log(`Creating backup for ${deviceId}`);
 
+  return await createBackup({
+    status: BackupState.Pending,
+    device: {
+      connect: {
+        id: deviceId,
+      },
+    },
+    ...data,
+  });
+}
+
+export async function createAndRunBackupForDeviceId(deviceId: number) {
   const device = await getDevice(deviceId);
 
   if (!device) {
     throw new Error("Device does not exist");
   }
 
-  const backup = await prisma.backup.create({
-    data: {
-      status: BackupState.Pending,
-      device: {
-        connect: {
-          id: device.id,
-        },
-      },
-    },
-  });
+  const backup = await createBackupForDeviceId(deviceId);
 
   return await BackupRunnerFactory.startBackup({ device, backup });
 }

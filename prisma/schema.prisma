@@ -91,11 +91,13 @@ model Device {
 
 model Backup {
   id         Int      @id @default(autoincrement())
+  jobId      Int?
   deviceId   Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   status     String
   bytes      Int?
+  job        Job?     @relation(fields: [jobId], references: [id])
   device     Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 }
 
@@ -126,5 +128,6 @@ model Job {
   finishedAt DateTime?
   status     String
   scheduleId Int
+  backups     Backup[]
   schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }

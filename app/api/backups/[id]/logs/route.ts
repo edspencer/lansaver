@@ -1,4 +1,4 @@
-import { getBackupLogs } from "@/lib/runner/logger";
+import { getBackupLogs } from "../../../../../lib/runner/logger";
 
 export async function GET(request: Request, { params }: { params: { id: string } }): Promise<Response> {
   const logs = await getBackupLogs(params.id);

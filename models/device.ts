@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 
-import DeviceSchema from "@/lib/validation/device";
+import DeviceSchema from "../lib/validation/device";
 import { encrypt, decrypt } from "@/lib/crypto";
 
 const prisma = new PrismaClient();

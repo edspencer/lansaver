@@ -1,14 +1,38 @@
-import { Job } from "@prisma/client";
+import type { Job, Schedule } from "@prisma/client";
 import { createJobLogger } from "../runner/logger";
 import { jobMachine, JobState } from "../stateMachines/job";
 import { createActor } from "xstate";
-import { updateJob } from "../../models/job";
+import { updateJob, createJob } from "../../models/job";
+import { createBackupForDeviceId } from "../../models/backup";
 import { executeJob } from "../runner/job";
 
 import path from "path";
 import BackupSaver from "../runner/saver";
 
-export async function startJob({ job }: { job: Job }) {
+export async function createJobForSchedule({ schedule }: { schedule: Schedule }) {
+  //create a new job in the database
+  const job = await createJob({
+    schedule: { connect: { id: schedule.id } },
+    status: "pending",
+  });
+
+  //create a backup job for each device in the schedule
+  const devices = schedule.devices?.split(",").map((id) => parseInt(id, 10)) || [];
+  const backups = [];
+
+  //create a new backup for each device
+  for (const deviceId of devices) {
+    //create a new backup in the database
+    const backup = await createBackupForDeviceId(deviceId, { job: { connect: { id: job.id } } });
+    backups.push(backup);
+  }
+
+  return { job, backups };
+}
+
+export async function createAndExecuteJobForSchedule({ schedule }: { schedule: Schedule }) {
+  const { job, backups } = await createJobForSchedule({ schedule });
+
   const logger = createJobLogger(job.id);
 
   //initiate our state machine, persist state changes to the database
@@ -32,5 +56,6 @@ export async function startJob({ job }: { job: Job }) {
     jobActor,
     updateJob,
     fileSaver,
+    backups,
   });
 }

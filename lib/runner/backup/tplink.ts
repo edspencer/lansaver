@@ -102,8 +102,8 @@ export class TPLinkRunner implements BackupRunner {
     logger.info("Starting TP Link backup");
     backupActor.send({ type: "START" });
 
-    const { hostname, config = null } = device;
-    const { username, password } = JSON.parse(config || "{}");
+    const { hostname, credentials = null } = device;
+    const { username, password } = JSON.parse(credentials || "{}");
 
     const authToken = await getAuthToken({ hostname, username, password, logger });
 

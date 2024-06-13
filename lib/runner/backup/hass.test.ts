@@ -41,6 +41,7 @@ describe("HomeAssistantBackupRunner", () => {
       updatedAt: new Date(),
       status: "pending",
       bytes: 0,
+      jobId: null,
     };
 
     updateBackup = jest.fn();

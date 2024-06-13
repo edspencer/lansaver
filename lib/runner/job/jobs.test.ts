@@ -1,5 +1,5 @@
 import { executeJob } from "./index";
-import type { Schedule, Job, Device } from "@prisma/client";
+import type { Schedule, Job, Device, Backup } from "@prisma/client";
 import BackupSaver from "../saver";
 
 describe("startJob", () => {
@@ -52,6 +52,8 @@ describe("startJob", () => {
     finishedAt: null,
   };
 
+  const backups: Backup[] = [];
+
   beforeEach(() => {
     updateJob = jest.fn();
     logger = {
@@ -64,7 +66,38 @@ describe("startJob", () => {
     };
   });
 
-  it("should create a new job instance", async () => {
-    expect(() => executeJob({ job, logger, jobActor, updateJob, fileSaver })).not.toThrow();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
+
+  it("should start the job", async () => {
+    await executeJob({ job, logger, jobActor, updateJob, fileSaver, backups });
+
+    expect(logger.info).toHaveBeenCalledWith(`Starting job ${job.id}`);
+    expect(jobActor.send).toHaveBeenCalledWith({ type: "START" });
+  });
+
+  it("should set the Job startedAt field to the current date", async () => {
+    await executeJob({ job, logger, jobActor, updateJob, fileSaver, backups });
+
+    expect(updateJob).toHaveBeenCalledWith(job.id, expect.objectContaining({ startedAt: expect.any(Date) }));
+  });
+
+  // it("should set the Job finishedAt field to the current date", async () => {
+  //   await executeJob({ job, logger, jobActor, updateJob, fileSaver });
+
+  //   expect(updateJob).toHaveBeenCalledWith(job.id, expect.objectContaining({ finishedAt: expect.any(Date) }));
+  // });
+
+  // describe("the backup jobs", () => {
+  //   it.todo("should start each backup");
+  // });
+
+  // describe("if each of the backups succeeds", () => {
+  //   it.todo("should set the job status to complete");
+  // });
+
+  // describe("if any of the backups fail", () => {
+  //   it.todo("should set the job status to failed");
+  // });
 });

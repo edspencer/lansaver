@@ -5,7 +5,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { Schedule } from "@prisma/client";
-import { createSchedule, deleteSchedule } from "@/models/schedule";
+import { createSchedule, deleteSchedule, getSchedule } from "../../models/schedule";
+import { createAndExecuteJobForSchedule } from "../../lib/service/jobs";
 
 export type CreateScheduleAction = {
   success?: boolean;
@@ -124,8 +125,26 @@ export async function deleteScheduleAction(id: number) {
 
 export async function runScheduleAction(id: number) {
   console.log(`running schedule ${id}`);
+
+  //get schedule from prisma
+  const schedule = await getSchedule(id);
+
+  if (!schedule) {
+    return {
+      success: false,
+      message: "Schedule not found",
+    };
+  }
+
+  await createAndExecuteJobForSchedule({ schedule });
   return {
     success: true,
     message: "Schedule Run Successfully",
   };
 }
+
+type ServerActionResponse = {
+  success: boolean;
+  message: string;
+  error?: any;
+};

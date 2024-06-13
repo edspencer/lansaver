@@ -4,7 +4,6 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import { createDevice, getDevice, getDevices } from "@/models/device";
 import { revalidatePath } from "next/cache";
-import { decrypt } from "@/lib/crypto";
 
 const prisma = new PrismaClient();
 
