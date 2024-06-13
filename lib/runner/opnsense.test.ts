@@ -28,8 +28,8 @@ describe("OPNSenseBackupRunner", () => {
       id: 1,
       type: "opnsense",
       hostname: "opnsense.local",
-      config: JSON.stringify({ API_KEY, API_SECRET }),
-      credentials: "{}",
+      credentials: JSON.stringify({ API_KEY, API_SECRET }),
+      config: "{}",
       createdAt: new Date(),
       updatedAt: new Date(),
     };

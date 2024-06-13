@@ -1,7 +1,7 @@
 import { Heading } from "../../components/heading";
 import { Button } from "../../components/button";
 import { SchedulesTable } from "@/components/schedule/table";
-import { getSchedules } from "../models/schedule";
+import { getSchedules } from "../../models/schedule";
 
 export default async function Schedules() {
   const schedules = await getSchedules();

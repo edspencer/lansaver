@@ -1,5 +1,5 @@
-import { getDevices } from "@/app/models/device";
-import { getSchedule } from "@/app/models/schedule";
+import { getDevices } from "@/models/device";
+import { getSchedule } from "@/models/schedule";
 import EditScheduleForm from "@/components/schedule/edit-form";
 
 import { notFound } from "next/navigation";

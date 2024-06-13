@@ -1,43 +1,10 @@
 import { Backup, Prisma, PrismaClient } from "@prisma/client";
 import { getDevice } from "./device";
-import { BackupRunnerFactory } from "../../lib/runner";
-import { logLocationForBackup } from "../../lib/runner/logger";
+import { BackupRunnerFactory } from "../lib/runner";
+import { logLocationForBackup } from "../lib/runner/logger";
+import { BackupState } from "@/lib/stateMachines/backup";
 
 import fs from "fs";
-
-import { createMachine } from "xstate";
-
-export enum BackupState {
-  Pending = "pending",
-  Started = "started",
-  Completed = "completed",
-  Failed = "failed",
-}
-
-export const backupMachine = createMachine({
-  id: "backup",
-  initial: BackupState.Pending,
-  states: {
-    [BackupState.Pending]: {
-      on: {
-        START: BackupState.Started,
-        FAIL: BackupState.Failed,
-      },
-    },
-    [BackupState.Started]: {
-      on: {
-        COMPLETE: BackupState.Completed,
-        FAIL: BackupState.Failed,
-      },
-    },
-    [BackupState.Completed]: {
-      type: "final",
-    },
-    [BackupState.Failed]: {
-      type: "final",
-    },
-  },
-});
 
 const prisma = new PrismaClient();
 
@@ -85,6 +52,7 @@ export async function deleteBackup(id: number) {
   }
 
   //delete the backup files
+  //TODO: implement this
 
   return await prisma.backup.delete({ where: { id } });
 }

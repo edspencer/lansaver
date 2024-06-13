@@ -1,4 +1,4 @@
-import { getSchedule, getScheduleDevices } from "@/app/models/schedule";
+import { getSchedule, getScheduleDevices } from "@/models/schedule";
 import { notFound } from "next/navigation";
 
 import { RunScheduleForm, DeleteScheduleButton } from "@/components/schedule/buttons";

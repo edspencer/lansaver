@@ -9,7 +9,7 @@ import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "@
 import { BackupDeviceForm, DeleteDeviceButton } from "@/components/device/buttons";
 import Link from "next/link";
 
-import { getDevice, getDeviceBackups } from "@/app/models/device";
+import { getDevice, getDeviceBackups } from "@/models/device";
 
 import type { Backup } from "@prisma/client";
 

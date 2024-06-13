@@ -9,7 +9,8 @@ import type { Actor } from "xstate";
 import type { Logger } from "winston";
 import path from "path";
 
-import { BackupState, backupMachine, updateBackup } from "../../app/models/backup";
+import { updateBackup } from "../../models/backup";
+import { BackupState, backupMachine } from "../stateMachines/backup";
 import { createActor } from "xstate";
 
 export interface BackupRunner {

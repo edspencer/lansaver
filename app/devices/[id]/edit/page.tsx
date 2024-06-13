@@ -4,7 +4,7 @@ import { Button } from "@/components/button";
 import { notFound } from "next/navigation";
 import DeviceForm from "@/components/device/form";
 import { updateDeviceAction } from "@/app/actions/devices";
-import { getDevice } from "@/app/models/device";
+import { getDevice } from "@/models/device";
 
 export default async function EditDevicePage({ params: { id } }: { params: { id: string } }) {
   const device = await getDevice(Number(id));

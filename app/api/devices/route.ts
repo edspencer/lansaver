@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
 
 import { ZodError } from "zod";
-import { createDevice, getDevice, getDevices } from "@/app/models/device";
+import { createDevice, getDevice, getDevices } from "@/models/device";
 import { revalidatePath } from "next/cache";
 import { decrypt } from "@/lib/crypto";
 

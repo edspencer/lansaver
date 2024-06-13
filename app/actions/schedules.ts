@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { Schedule } from "@prisma/client";
-import { createSchedule, deleteSchedule } from "@/app/models/schedule";
+import { createSchedule, deleteSchedule } from "@/models/schedule";
 
 export type CreateScheduleAction = {
   success?: boolean;

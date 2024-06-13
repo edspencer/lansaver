@@ -32,8 +32,8 @@ export class OPNSenseBackupRunner implements BackupRunner {
     try {
       logger.info("Starting OPNSense backup");
 
-      const { hostname, config = null } = device;
-      const { API_KEY, API_SECRET } = JSON.parse(config || "{}");
+      const { hostname, credentials = null } = device;
+      const { API_KEY, API_SECRET } = JSON.parse(credentials || "{}");
 
       const backupUrl = `https://${hostname}/api/core/backup/download/this`;
 

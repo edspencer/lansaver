@@ -10,6 +10,8 @@ Allows users to configure Devices on their network that they wish to back up con
 - All backups UI
 - Controlled dataset
 - Toasts for user feedback - how to incorporate into server actions (esp with redirect)?
+- Delete backup files when deleting the backup db entry (depends on where we saved the file...)
+- Destinations support
 
 ## Supported Backup Sources
 

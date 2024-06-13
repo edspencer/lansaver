@@ -1,6 +1,6 @@
 "use server";
 
-import { createBackupForDeviceId, deleteBackup, getBackup } from "@/app/models/backup";
+import { createBackupForDeviceId, deleteBackup, getBackup } from "@/models/backup";
 import { revalidatePath } from "next/cache";
 
 //error conditions:

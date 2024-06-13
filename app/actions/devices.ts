@@ -1,6 +1,6 @@
 "use server";
 
-import { createDevice, deleteDevice, updateDevice } from "@/app/models/device";
+import { createDevice, deleteDevice, updateDevice } from "@/models/device";
 
 import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
