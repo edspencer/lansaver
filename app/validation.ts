@@ -15,3 +15,8 @@ export const BackupSchema = z.object({
   }),
   status: z.enum(["pending", "completed", "failed"]),
 }) satisfies z.ZodType<Prisma.BackupCreateInput>;
+
+export const ScheduleSchema = z.object({
+  name: z.string(),
+  cron: z.string().min(5),
+}) satisfies z.ZodType<Prisma.ScheduleCreateInput>;

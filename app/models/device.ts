@@ -17,7 +17,7 @@ export async function getDevice(id: number) {
 
 export async function getDevices() {
   const devices = await prisma.device.findMany();
-  return devices; //.map((device) => ({ ...device, credentials: decrypt(device.credentials) }));
+  return devices.map((device) => ({ ...device, credentials: decrypt(device.credentials) }));
 }
 
 export async function createDevice(data: Prisma.DeviceCreateInput) {

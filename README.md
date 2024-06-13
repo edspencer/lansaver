@@ -2,6 +2,14 @@
 
 Allows users to configure Devices on their network that they wish to back up configurations for - Firewalls, Managed Switches, Home Assistant instances, etc
 
+## To do
+
+- username/password credentials
+- Schedules UI
+- Settings?
+- All backups UI
+- Controlled dataset
+
 ## Supported Backup Sources
 
 - OPNSense

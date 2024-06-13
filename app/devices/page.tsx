@@ -1,9 +1,8 @@
 "use client";
 
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../../components/table";
 import { Heading } from "../../components/heading";
 import { Button } from "../../components/button";
-import type { Device } from "@prisma/client";
+import DevicesTable from "@/components/device/table";
 import useSWR from "swr";
 
 //fetches devices from Prisma
@@ -31,27 +30,4 @@ export default function Devices() {
 
 function Loading() {
   return <div className="text-center py-10">Loading...</div>;
-}
-
-function DevicesTable({ devices }: { devices: Device[] }) {
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableHeader>Type</TableHeader>
-          <TableHeader>Hostname</TableHeader>
-          <TableHeader>Role</TableHeader>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {devices.map((device) => (
-          <TableRow key={device.id} href={`/devices/${device.id}`}>
-            <TableCell className="font-medium">{device.type}</TableCell>
-            <TableCell>{device.hostname}</TableCell>
-            <TableCell className="text-zinc-500">{device.hostname}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
 }

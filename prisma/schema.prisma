@@ -101,9 +101,10 @@ model Backup {
 
 model Schedule {
   id        Int       @id @default(autoincrement())
-  disabled  Boolean
+  disabled  Boolean @default(false)
   cron      String
   name      String
+  devices   String?
   jobs      Job[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
