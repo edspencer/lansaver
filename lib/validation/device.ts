@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
+import { DeviceTypes } from "../enums";
 
 const DeviceSchema = z.object({
-  type: z.string(),
+  type: z.enum([Object.keys(DeviceTypes)[0], ...Object.keys(DeviceTypes)]),
   hostname: z.string().min(2),
   config: z.string(),
 }) satisfies z.ZodType<Prisma.DeviceCreateInput>;

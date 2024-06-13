@@ -2,7 +2,7 @@ import type { Device, Backup } from "@prisma/client";
 import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import BackupSaver from "./saver";
+import BackupSaver from "../saver";
 import { Actor } from "xstate";
 
 // Disable SSL verification because OPNSense usually uses a self-signed certificates

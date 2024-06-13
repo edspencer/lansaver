@@ -2,7 +2,7 @@ import type { Device, Backup } from "@prisma/client";
 import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import BackupSaver from "./saver";
+import BackupSaver from "../saver";
 
 // Disable SSL verification because Home Assistant usually uses a self-signed certificates
 const agent = new https.Agent({

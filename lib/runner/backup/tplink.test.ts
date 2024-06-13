@@ -1,6 +1,6 @@
 import { Backup, Device } from "@prisma/client";
 import { TPLinkRunner } from "./tplink";
-import BackupSaver from "./saver";
+import BackupSaver from "../saver";
 
 import fetch from "node-fetch";
 const { Response } = jest.requireActual("node-fetch");

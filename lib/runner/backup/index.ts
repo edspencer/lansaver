@@ -2,15 +2,15 @@ import type { Device, Backup } from "@prisma/client";
 import { OPNSenseBackupRunner } from "./opnsense";
 import { HomeAssistantRunner } from "./hass";
 import { TPLinkRunner } from "./tplink";
-import { createBackupLogger } from "./logger";
-import BackupSaver from "./saver";
+import { createBackupLogger } from "../logger";
+import BackupSaver from "../saver";
 
 import type { Actor } from "xstate";
 import type { Logger } from "winston";
 import path from "path";
 
-import { updateBackup } from "../../models/backup";
-import { BackupState, backupMachine } from "../stateMachines/backup";
+import { updateBackup } from "../../../models/backup";
+import { BackupState, backupMachine } from "../../stateMachines/backup";
 import { createActor } from "xstate";
 
 export interface BackupRunner {
@@ -68,8 +68,16 @@ export class BackupRunnerFactory {
   }
 
   // convenience method to start a backup without creating a runner, logger etc
-  static async startBackup({ device, backup }: { device: Device; backup: Backup }): Promise<Backup> {
-    const logger = await createBackupLogger(backup.id);
+  static async startBackup({
+    device,
+    backup,
+    jobLogger,
+  }: {
+    device: Device;
+    backup: Backup;
+    jobLogger?: Logger;
+  }): Promise<Backup> {
+    const logger = await createBackupLogger(backup.id, jobLogger);
 
     //initiate our state machine, persist state changes to the database
     const backupActor = createActor(backupMachine);

@@ -1,7 +1,7 @@
 import type { Device, Backup } from "@prisma/client";
 import { BackupRunner } from "./index";
 import fetch from "node-fetch";
-import BackupSaver from "./saver";
+import BackupSaver from "../saver";
 
 /**
  * Gets the _tid_ token from the TPLink device by sending a login request to /data/login.json.
