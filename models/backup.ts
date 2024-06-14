@@ -1,4 +1,4 @@
-import { Backup, Prisma, PrismaClient } from "@prisma/client";
+import { Backup, Device, Prisma, PrismaClient } from "@prisma/client";
 import { getDevice } from "./device";
 import { BackupRunnerFactory } from "../lib/runner/backup";
 import { logLocationForBackup } from "../lib/runner/logger";
@@ -66,4 +66,10 @@ export async function deleteBackup(id: number) {
 
 export async function getBackup(id: number) {
   return await prisma.backup.findUnique({ where: { id } });
+}
+
+export type BackupWithDevice = Backup & { device?: Device };
+
+export async function getBackupsForJob(jobId: number, includeDevice: boolean = true): Promise<BackupWithDevice[]> {
+  return await prisma.backup.findMany({ where: { jobId }, include: { device: includeDevice } });
 }

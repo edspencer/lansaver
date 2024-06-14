@@ -35,4 +35,6 @@ export async function deleteSchedule(id: number) {
   return await prisma.schedule.delete({ where: { id } });
 }
 
-export async function runSchedule(id: number) {}
+export async function recentJobs(id: number) {
+  return await prisma.job.findMany({ where: { scheduleId: id }, orderBy: { createdAt: "desc" }, take: 5 });
+}

@@ -1,4 +1,4 @@
-import { getSchedule, getScheduleDevices } from "@/models/schedule";
+import { getSchedule, getScheduleDevices, recentJobs } from "@/models/schedule";
 import { notFound } from "next/navigation";
 
 import { RunScheduleForm, DeleteScheduleButton } from "@/components/schedule/buttons";
@@ -6,6 +6,7 @@ import { Heading, Subheading } from "@/components/heading";
 import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
 import { Button } from "@/components/button";
 import DevicesTable from "@/components/device/table";
+import { JobsTable } from "@/components/job/table";
 
 export default async function SchedulePage({ params: { id } }: { params: { id: string } }) {
   const schedule = await getSchedule(parseInt(id, 10));
@@ -15,6 +16,7 @@ export default async function SchedulePage({ params: { id } }: { params: { id: s
   }
 
   const devices = await getScheduleDevices(schedule.id);
+  const jobs = await recentJobs(schedule.id);
 
   return (
     <div>
@@ -38,6 +40,8 @@ export default async function SchedulePage({ params: { id } }: { params: { id: s
         <DescriptionTerm>Enabled</DescriptionTerm>
         <DescriptionDetails>{schedule.disabled}</DescriptionDetails>
       </DescriptionList>
+      <Subheading className="mt-8 mb-2">Recent Jobs</Subheading>
+      <JobsTable jobs={jobs} />
       <Subheading className="mt-8 mb-2">Devices in this Schedule</Subheading>
       <DevicesTable devices={devices} />
       {/* <RecentBackups deviceId={schedule.id} /> */}

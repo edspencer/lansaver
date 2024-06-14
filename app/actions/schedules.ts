@@ -137,6 +137,8 @@ export async function runScheduleAction(id: number) {
   }
 
   await createAndExecuteJobForSchedule({ schedule });
+  revalidatePath(`/schedules/${id}`);
+
   return {
     success: true,
     message: "Schedule Run Successfully",

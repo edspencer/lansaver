@@ -36,5 +36,6 @@ export async function executeJob({
     await BackupRunnerFactory.startBackup({ device, backup, jobLogger: logger });
   }
 
+  jobActor.send({ type: "COMPLETE" });
   await updateJob(job.id, { finishedAt: new Date() });
 }
