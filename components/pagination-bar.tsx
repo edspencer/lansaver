@@ -31,12 +31,12 @@ export default function PaginationBar({
         </PaginationList>
         <PaginationNext href={page === totalPages ? undefined : paginationHref(page + 1, perPage)} />
       </Pagination>
-      <PageSizeButtonGroup page={page} perPage={perPage} />
+      <PageSizeButtonGroup perPage={perPage} />
     </div>
   );
 }
 
-function PageSizeButtonGroup({ page = 1, perPage = defaultPerPage }) {
+function PageSizeButtonGroup({ perPage = defaultPerPage }) {
   return (
     <div className="flex border rounded-lg">
       <PageSizeButton perPage={10} current={perPage === 10} />
