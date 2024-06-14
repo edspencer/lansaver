@@ -2,6 +2,7 @@
 
 import type { JobsWithBackupCount } from "@/models/schedule";
 import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
+import StatusBadge from "../backup/statusbadge";
 
 export function JobsTable({ jobs }: { jobs: JobsWithBackupCount[] }) {
   console.log(jobs);
@@ -19,7 +20,9 @@ export function JobsTable({ jobs }: { jobs: JobsWithBackupCount[] }) {
         {jobs.map((job) => (
           <TableRow key={job.id} href={`/schedules/${job.scheduleId}/jobs/${job.id}`}>
             <TableCell>{job.id}</TableCell>
-            <TableCell className="font-medium">{job.status}</TableCell>
+            <TableCell className="font-medium">
+              <StatusBadge status={job.status} />
+            </TableCell>
             <TableCell>{job.finishedAt?.toLocaleString()}</TableCell>
             <TableCell>{job._count.backups}</TableCell>
           </TableRow>

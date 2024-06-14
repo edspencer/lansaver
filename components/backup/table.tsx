@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@
 import { Link } from "@/components/common/link";
 
 import type { BackupWithDevice } from "@/models/backup";
+import StatusBadge from "./statusbadge";
 
 export default function BackupsTable({
   backups,
@@ -61,7 +62,9 @@ const BackupRow = ({ backup, showDevice = false }: { backup: BackupWithDevice; s
           <Link href={`/devices/${backup.deviceId}`}>{backup.device?.hostname}</Link>
         </TableCell>
       )}
-      <TableCell className="font-medium">{backup.status}</TableCell>
+      <TableCell className="font-medium">
+        <StatusBadge status={backup.status} />
+      </TableCell>
       <TableCell>{backup.createdAt.toLocaleString("en-US", { timeZoneName: "short" })}</TableCell>
       <TableCell className="text-zinc-500">{bytes(backup.bytes ?? 0)}</TableCell>
       <TableCell className="gap-2 flex justify-end">

@@ -48,7 +48,6 @@ export async function createAndExecuteJobForSchedule({ schedule }: { schedule: S
   jobActor.start();
 
   const fileSaver = new BackupSaver(process.env.BACKUP_DIRECTORY || path.join(process.cwd(), "backups"));
-  logger.info(`Starting job ${job.id}`);
 
   return await executeJob({
     job,

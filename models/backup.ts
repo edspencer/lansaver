@@ -64,6 +64,37 @@ export async function deleteBackup(id: number) {
   return await prisma.backup.delete({ where: { id } });
 }
 
+export async function getBackups({ includeDevice = false }: { includeDevice: boolean }) {
+  return await prisma.backup.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 10,
+    include: { device: includeDevice },
+  });
+}
+
+export async function getPaginatedBackups({
+  page = 1,
+  perPage = 10,
+  includeDevice = false,
+}: {
+  page?: number;
+  perPage?: number;
+  includeDevice: boolean;
+}) {
+  const backups = await prisma.backup.findMany({
+    orderBy: { createdAt: "desc" },
+    skip: (Number(page) - 1) * perPage,
+    take: Number(perPage),
+    include: { device: includeDevice },
+  });
+
+  //get counts
+  const total = await prisma.backup.count();
+  const totalPages = Math.ceil(total / perPage);
+
+  return { backups, total, totalPages };
+}
+
 export async function getBackup(id: number) {
   return await prisma.backup.findUnique({ where: { id } });
 }
