@@ -1,9 +1,10 @@
 "use client";
 
-import type { Job } from "@prisma/client";
+import type { JobsWithBackupCount } from "@/models/schedule";
 import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 
-export function JobsTable({ jobs }: { jobs: Job[] }) {
+export function JobsTable({ jobs }: { jobs: JobsWithBackupCount[] }) {
+  console.log(jobs);
   return (
     <Table>
       <TableHead>
@@ -11,6 +12,7 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
           <TableHeader>Job</TableHeader>
           <TableHeader>Status</TableHeader>
           <TableHeader>Finished</TableHeader>
+          <TableHeader>Device count</TableHeader>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -18,7 +20,8 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
           <TableRow key={job.id} href={`/schedules/${job.scheduleId}/jobs/${job.id}`}>
             <TableCell>{job.id}</TableCell>
             <TableCell className="font-medium">{job.status}</TableCell>
-            <TableCell>{job.finishedAt?.toLocaleDateString()}</TableCell>
+            <TableCell>{job.finishedAt?.toLocaleString()}</TableCell>
+            <TableCell>{job._count.backups}</TableCell>
           </TableRow>
         ))}
       </TableBody>

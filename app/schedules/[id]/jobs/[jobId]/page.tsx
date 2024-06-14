@@ -5,12 +5,18 @@ import { notFound } from "next/navigation";
 import { getJob } from "@/models/job";
 import { getBackupsForJob } from "@/models/backup";
 import { Button } from "@/components/common/button";
+import { getJobLogs } from "@/lib/runner/logger";
 
 import BackupsTable from "@/components/backup/table";
+import { Logs } from "@/components/backup/logs";
+import { TextLink } from "@/components/common/text";
 
 export default async function JobDetailsPage({ params: { id, jobId } }: { params: { id: string; jobId: string } }) {
   const job = await getJob(Number(jobId));
   const backups = await getBackupsForJob(Number(jobId));
+  const logs = await getJobLogs(jobId);
+
+  console.log(logs);
 
   if (!job) {
     return notFound();
@@ -22,9 +28,7 @@ export default async function JobDetailsPage({ params: { id, jobId } }: { params
   return (
     <>
       <div className="flex w-full flex-wrap items-end justify-between gap-4 pb-6">
-        <Button plain href={`/schedules/${id}`}>
-          &laquo; Back to Schedule
-        </Button>
+        <TextLink href={`/schedules/${id}`}>&laquo; Schedule</TextLink>
         <div className="flex gap-4">
           {/* <RunScheduleForm schedule={schedule} />
 
@@ -46,6 +50,10 @@ export default async function JobDetailsPage({ params: { id, jobId } }: { params
       <div className="pt-6">
         <Subheading className="mb-4">Backups in this Job</Subheading>
         <BackupsTable backups={backups} showDevice={true} />
+      </div>
+      <div className="pt-6">
+        <Subheading className="mb-4">Logs</Subheading>
+        <Logs logLines={logs} />
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import type { Device } from "@prisma/client";
+import type { Device, Job } from "@prisma/client";
 
 // import { DeviceSchema } from "../validation";
 
@@ -35,6 +35,19 @@ export async function deleteSchedule(id: number) {
   return await prisma.schedule.delete({ where: { id } });
 }
 
-export async function recentJobs(id: number) {
-  return await prisma.job.findMany({ where: { scheduleId: id }, orderBy: { createdAt: "desc" }, take: 5 });
+export type JobsWithBackupCount = Job & { _count: { backups: number } };
+
+export async function recentJobs(id: number): Promise<JobsWithBackupCount[]> {
+  return await prisma.job.findMany({
+    where: { scheduleId: id },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+    include: {
+      _count: {
+        select: {
+          backups: true,
+        },
+      },
+    },
+  });
 }

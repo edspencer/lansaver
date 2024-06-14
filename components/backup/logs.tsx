@@ -61,7 +61,7 @@ export default function BackupLogs({ backup }: { backup: Backup }) {
   );
 }
 
-const Logs = ({ logLines }: { logLines: string }) => {
+export const Logs = ({ logLines }: { logLines: string }) => {
   return (
     <div className="font-mono text-sm">
       {logLines.split("\n").map((line, index) => (
