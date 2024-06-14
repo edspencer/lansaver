@@ -1,17 +1,12 @@
-"use client";
+import { getDevices } from "@/models/device";
 
 import { Heading } from "../../components/common/heading";
 import { Button } from "../../components/common/button";
 import DevicesTable from "@/components/device/table";
-import useSWR from "swr";
+import NoContentYet from "@/components/no-content-yet";
 
-//fetches devices from Prisma
-function fetchDevices() {}
-
-const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
-
-export default function Devices() {
-  const { data, error, isLoading } = useSWR("/api/devices", fetcher);
+export default async function Devices() {
+  const devices = await getDevices();
 
   return (
     <div>
@@ -21,13 +16,8 @@ export default function Devices() {
           <Button href="/devices/create">Add Device</Button>
         </div>
       </div>
-      {error && <div>Error loading devices</div>}
-      {data && <DevicesTable devices={data} />}
-      {isLoading && <Loading />}
+      {devices.length ? <DevicesTable devices={devices} /> : null}
+      <NoContentYet items={devices} href="/devices/create" message="No Devices yet" />
     </div>
   );
-}
-
-function Loading() {
-  return <div className="text-center py-10">Loading...</div>;
 }

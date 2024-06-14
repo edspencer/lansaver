@@ -2,6 +2,7 @@ import { Heading } from "../../components/common/heading";
 import { Button } from "../../components/common/button";
 import { SchedulesTable } from "@/components/schedule/table";
 import { getSchedules } from "../../models/schedule";
+import NoContentYet from "@/components/no-content-yet";
 
 export default async function Schedules() {
   const schedules = await getSchedules();
@@ -14,7 +15,13 @@ export default async function Schedules() {
           <Button href="/schedules/create">Add Schedule</Button>
         </div>
       </div>
-      <SchedulesTable schedules={schedules} />
+
+      {schedules.length ? <SchedulesTable schedules={schedules} /> : null}
+      <NoContentYet items={schedules} message="No Schedules yet" href="/schedules/create" />
     </div>
   );
 }
+
+const NoSchedules = () => {
+  return <div className="flex items-center justify-center h-48 text-gray-500">No schedules found</div>;
+};
