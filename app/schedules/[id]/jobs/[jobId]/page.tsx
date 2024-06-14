@@ -16,14 +16,9 @@ export default async function JobDetailsPage({ params: { id, jobId } }: { params
   const backups = await getBackupsForJob(Number(jobId));
   const logs = await getJobLogs(jobId);
 
-  console.log(logs);
-
   if (!job) {
     return notFound();
   }
-
-  console.log(job);
-  console.log(backups);
 
   return (
     <>

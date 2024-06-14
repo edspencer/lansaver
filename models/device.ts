@@ -1,9 +1,8 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import DeviceSchema from "../lib/validation/device";
 import { encrypt, decrypt } from "@/lib/crypto";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prismaClient";
 
 export async function getDevice(id: number) {
   const device = await prisma.device.findUnique({ where: { id } });
@@ -43,4 +42,8 @@ export async function getDeviceBackups(id: number) {
 
 function encryptedData(data: any) {
   return { ...data, credentials: encrypt((data.credentials || "{}") as string) };
+}
+
+export async function deleteAllDevices() {
+  return await prisma.device.deleteMany({});
 }

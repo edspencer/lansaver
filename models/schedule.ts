@@ -1,9 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { Device, Job } from "@prisma/client";
 
-// import { DeviceSchema } from "../validation";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prismaClient";
 
 export async function getSchedules() {
   return await prisma.schedule.findMany();
@@ -50,4 +48,8 @@ export async function recentJobs(id: number): Promise<JobsWithBackupCount[]> {
       },
     },
   });
+}
+
+export async function deleteAllSchedules() {
+  return await prisma.schedule.deleteMany({});
 }

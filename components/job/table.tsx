@@ -5,7 +5,6 @@ import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from ".
 import StatusBadge from "../backup/statusbadge";
 
 export function JobsTable({ jobs }: { jobs: JobsWithBackupCount[] }) {
-  console.log(jobs);
   return (
     <Table>
       <TableHead>

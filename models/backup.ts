@@ -1,12 +1,11 @@
-import { Backup, Device, Prisma, PrismaClient } from "@prisma/client";
+import { Backup, Device, Prisma } from "@prisma/client";
 import { getDevice } from "./device";
 import { BackupRunnerFactory } from "../lib/runner/backup";
 import { logLocationForBackup } from "../lib/runner/logger";
 import { BackupState } from "../lib/stateMachines/backup";
+import prisma from "../lib/prismaClient";
 
 import fs from "fs";
-
-const prisma = new PrismaClient();
 
 export async function updateBackup(backupId: number, data: Prisma.BackupUpdateInput) {
   return await prisma.backup.update({
@@ -62,6 +61,10 @@ export async function deleteBackup(id: number) {
   //TODO: implement this
 
   return await prisma.backup.delete({ where: { id } });
+}
+
+export async function deleteAllBackups() {
+  return await prisma.backup.deleteMany({});
 }
 
 export async function getBackups({ includeDevice = false }: { includeDevice: boolean }) {

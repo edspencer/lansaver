@@ -1,7 +1,7 @@
 import type { Job } from "@prisma/client";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-const prisma = new PrismaClient();
+import prisma from "../lib/prismaClient";
 
 export async function getJob(id: number) {
   return await prisma.job.findUnique({ where: { id } });

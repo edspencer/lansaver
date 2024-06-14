@@ -11,10 +11,10 @@ export default async function BackupsPage({ searchParams: { page = 1, perPage = 
     <>
       <Heading className="mb-8">All Backups ({total})</Heading>
       <NoContentYet items={backups} message="No backups yet" />
+      {totalPages > 0 ? <BackupsTable backups={backups} showDevice={true} /> : null}
       {backups.length === 0 ? null : (
         <PaginationBar className="mt-6" perPage={Number(perPage)} page={Number(page)} totalPages={totalPages} />
       )}
-      {totalPages > 1 ? <BackupsTable backups={backups} showDevice={true} /> : null}
     </>
   );
 }

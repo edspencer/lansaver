@@ -40,3 +40,4 @@ prisma/dev.sqlite3
 
 /backups
 /logs
+/script/localdata.ts

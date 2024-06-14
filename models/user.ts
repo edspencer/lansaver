@@ -1,9 +1,8 @@
 "use server";
-import { Prisma, PrismaClient } from "@prisma/client";
-import type { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import bcrypt from "bcryptjs";
-const prisma = new PrismaClient();
+import prisma from "../lib/prismaClient";
 
 export async function hashPassword(password: string) {
   return bcrypt.hash(password, 10);
