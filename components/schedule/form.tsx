@@ -1,12 +1,12 @@
 import type { Schedule, Device } from "@prisma/client";
 
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
-import { Field, Label, Description, Fieldset, Legend } from "@/components/fieldset";
-import { Text } from "@/components/text";
+import { Button } from "@/components/common/button";
+import { Input } from "@/components/common/input";
+import { Field, Label, Description, Fieldset, Legend } from "@/components/common/fieldset";
+import { Text } from "@/components/common/text";
 import { useFormStatus } from "react-dom";
-import { Link } from "@/components/link";
-import { Checkbox, CheckboxField, CheckboxGroup } from "../checkbox";
+import { Link } from "@/components/common/link";
+import { Checkbox, CheckboxField, CheckboxGroup } from "../common/checkbox";
 
 export default function ScheduleForm({
   schedule,

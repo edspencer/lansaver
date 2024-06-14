@@ -1,4 +1,4 @@
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../../components/table";
+import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 import type { Device } from "@prisma/client";
 
 export default function DevicesTable({ devices }: { devices: Device[] }) {

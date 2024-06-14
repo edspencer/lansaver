@@ -1,10 +1,10 @@
-import { Heading, Subheading } from "@/components/heading";
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
+import { Heading, Subheading } from "@/components/common/heading";
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/common/description-list";
 import { notFound } from "next/navigation";
 
 import { getJob } from "@/models/job";
 import { getBackupsForJob } from "@/models/backup";
-import { Button } from "@/components/button";
+import { Button } from "@/components/common/button";
 
 import BackupsTable from "@/components/backup/table";
 

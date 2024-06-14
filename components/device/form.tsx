@@ -4,9 +4,9 @@ import { SubmitButton } from "@/components/device/buttons";
 
 import { useState } from "react";
 
-import { Input } from "@/components/input";
-import { Select } from "@/components/select";
-import { Field, Label, Description } from "@/components/fieldset";
+import { Input } from "@/components/common/input";
+import { Select } from "@/components/common/select";
+import { Field, Label, Description } from "@/components/common/fieldset";
 
 export default function DeviceForm({ device, formAction }: { device?: Device; formAction: any }) {
   const [type, setType] = useState(device?.type || "opnsense");

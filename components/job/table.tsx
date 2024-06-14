@@ -1,7 +1,7 @@
 "use client";
 
 import type { Job } from "@prisma/client";
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "..//table";
+import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 
 export function JobsTable({ jobs }: { jobs: Job[] }) {
   return (

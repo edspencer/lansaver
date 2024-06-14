@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
-import { Heading, Subheading } from "@/components/heading";
-import { Button } from "@/components/button";
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/common/description-list";
+import { Heading, Subheading } from "@/components/common/heading";
+import { Button } from "@/components/common/button";
 import { BackupDeviceForm, DeleteDeviceButton } from "@/components/device/buttons";
 import BackupsTable from "@/components/backup/table";
 

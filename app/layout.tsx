@@ -12,14 +12,29 @@ export const metadata: Metadata = {
   description: "Saves your LAN configurations",
 };
 
-import { Avatar } from "../components/avatar";
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer, NavbarDivider, NavbarLabel } from "../components/navbar";
-import { Sidebar, SidebarBody, SidebarHeader, SidebarItem, SidebarLabel, SidebarSection } from "../components/sidebar";
-import { StackedLayout } from "../components/stacked-layout";
+import { Avatar } from "../components/common/avatar";
+import {
+  Navbar,
+  NavbarItem,
+  NavbarSection,
+  NavbarSpacer,
+  NavbarDivider,
+  NavbarLabel,
+} from "../components/common/navbar";
+import {
+  Sidebar,
+  SidebarBody,
+  SidebarHeader,
+  SidebarItem,
+  SidebarLabel,
+  SidebarSection,
+} from "../components/common/sidebar";
+import { StackedLayout } from "../components/common/stacked-layout";
 import { ArrowRightStartOnRectangleIcon, Cog8ToothIcon } from "@heroicons/react/16/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
 
-import SignOutButton from "../components/signout-button";
+import SignOutButton from "../components/common/signout-button";
+import { NavLinks, SidebarLinks } from "@/components/navitems";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -45,11 +60,7 @@ export default function RootLayout({
               </NavbarItem>
               <NavbarDivider className="max-lg:hidden" />
               <NavbarSection className="max-lg:hidden">
-                {navItems.map(({ label, href }) => (
-                  <NavbarItem key={label} href={href} current>
-                    {label}
-                  </NavbarItem>
-                ))}
+                <NavLinks items={navItems} />
               </NavbarSection>
               <NavbarSpacer />
               <NavbarSection>
@@ -75,11 +86,7 @@ export default function RootLayout({
               </SidebarHeader>
               <SidebarBody>
                 <SidebarSection>
-                  {navItems.map(({ label, href }) => (
-                    <SidebarItem key={label} href={href}>
-                      {label}
-                    </SidebarItem>
-                  ))}
+                  <SidebarLinks items={navItems} />
                 </SidebarSection>
               </SidebarBody>
             </Sidebar>

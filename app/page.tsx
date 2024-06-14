@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import Image from "next/image";
-import { SignIn } from "../components/signin";
+import { SignIn } from "../components/common/signin";
 
 export default async function Home() {
   const session = await auth();

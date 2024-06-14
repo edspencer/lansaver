@@ -1,5 +1,5 @@
-import { Heading } from "../../components/heading";
-import { Button } from "../../components/button";
+import { Heading } from "../../components/common/heading";
+import { Button } from "../../components/common/button";
 import { SchedulesTable } from "@/components/schedule/table";
 import { getSchedules } from "../../models/schedule";
 

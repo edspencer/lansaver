@@ -1,7 +1,7 @@
 "use client";
 
-import { Spinner } from "../spinner";
-import { Button } from "../button";
+import { Spinner } from "../common/spinner";
+import { Button } from "../common/button";
 import { deleteBackupAction } from "../../app/actions/backups";
 import { useFormStatus } from "react-dom";
 import type { Backup } from "@prisma/client";

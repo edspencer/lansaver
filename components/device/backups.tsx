@@ -1,5 +1,5 @@
 import type { Device } from "@prisma/client";
-import { Heading } from "../heading";
+import { Heading } from "../common/heading";
 
 export default function DeviceBackups({ device }: { device: Device }) {
   return (

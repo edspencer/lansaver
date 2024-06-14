@@ -3,8 +3,8 @@
 import type { Device, Schedule } from "@prisma/client";
 import { useFormState } from "react-dom";
 import ScheduleForm from "@/components/schedule/form";
-import { Button } from "@/components/button";
-import { Heading } from "@/components/heading";
+import { Button } from "@/components/common/button";
+import { Heading } from "@/components/common/heading";
 import { updateScheduleAction } from "@/app/actions/schedules";
 
 export default function CreateScheduleForm({ schedule, devices }: { schedule: Schedule; devices: Device[] }) {

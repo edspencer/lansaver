@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useFormState } from "react-dom";
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/button";
-import { Field, Label, Description } from "@/components/fieldset";
-import { Input } from "@/components/input";
-import { Select } from "@/components/select";
+import { Heading } from "@/components/common/heading";
+import { Button } from "@/components/common/button";
+import { Field, Label, Description } from "@/components/common/fieldset";
+import { Input } from "@/components/common/input";
+import { Select } from "@/components/common/select";
 import error from "next/error";
 import { SubmitButton } from "@/components/device/buttons";
 

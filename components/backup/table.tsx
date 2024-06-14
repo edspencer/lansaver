@@ -2,9 +2,9 @@ import { ArrowDownTrayIcon, ArrowPathIcon } from "@heroicons/react/16/solid";
 import { DeleteBackupForm } from "@/components/backup/delete";
 import BackupLogsButton from "@/components/backup/logs";
 import bytes from "bytes";
-import { Button } from "@/components/button";
-import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/table";
-import { Link } from "@/components/link";
+import { Button } from "@/components/common/button";
+import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/common/table";
+import { Link } from "@/components/common/link";
 
 import type { BackupWithDevice } from "@/models/backup";
 

@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "../button";
-import { Alert, AlertTitle, AlertBody, AlertActions } from "../alert";
+import { Button } from "../common/button";
+import { Alert, AlertTitle, AlertBody, AlertActions } from "../common/alert";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Backup } from "@prisma/client";

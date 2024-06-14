@@ -1,7 +1,7 @@
 "use client";
 
-import { Spinner } from "../spinner";
-import { Button } from "../button";
+import { Spinner } from "../common/spinner";
+import { Button } from "../common/button";
 import { deleteScheduleAction, runScheduleAction } from "../../app/actions/schedules";
 import { useFormStatus } from "react-dom";
 import type { Schedule } from "@prisma/client";

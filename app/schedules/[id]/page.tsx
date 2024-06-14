@@ -2,9 +2,9 @@ import { getSchedule, getScheduleDevices, recentJobs } from "@/models/schedule";
 import { notFound } from "next/navigation";
 
 import { RunScheduleForm, DeleteScheduleButton } from "@/components/schedule/buttons";
-import { Heading, Subheading } from "@/components/heading";
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/description-list";
-import { Button } from "@/components/button";
+import { Heading, Subheading } from "@/components/common/heading";
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/common/description-list";
+import { Button } from "@/components/common/button";
 import DevicesTable from "@/components/device/table";
 import { JobsTable } from "@/components/job/table";
 

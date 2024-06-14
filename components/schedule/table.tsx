@@ -1,7 +1,7 @@
 "use client";
 
 import type { Schedule } from "@prisma/client";
-import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "..//table";
+import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 
 export function SchedulesTable({ schedules }: { schedules: Schedule[] }) {
   return (

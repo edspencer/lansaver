@@ -1,7 +1,7 @@
 "use client";
 
-import { Heading } from "../../components/heading";
-import { Button } from "../../components/button";
+import { Heading } from "../../components/common/heading";
+import { Button } from "../../components/common/button";
 import DevicesTable from "@/components/device/table";
 import useSWR from "swr";
 
