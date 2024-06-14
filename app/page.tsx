@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import Image from "next/image";
 import { SignIn } from "../components/common/signin";
+import SignOut from "@/components/common/signout-button";
 
 export default async function Home() {
   const session = await auth();
@@ -15,6 +16,7 @@ export default async function Home() {
           <SignIn />
         </div>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none"></div>
+        <SignOut />
       </div>
     </main>
   );
