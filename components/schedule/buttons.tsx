@@ -15,10 +15,7 @@ export function RunScheduleForm({ schedule }: { schedule: Schedule }) {
 }
 
 export function RunScheduleButton() {
-  const formState = useFormStatus();
-
-  console.log(formState);
-  const { pending } = formState;
+  const { pending } = useFormStatus();
 
   return (
     <Button aria-disabled={pending} color="zinc" type="submit">

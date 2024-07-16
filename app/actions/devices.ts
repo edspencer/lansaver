@@ -6,7 +6,7 @@ import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-import type { GenericServerAction } from "@/lib/actions";
+import type { GenericServerAction } from "@/lib/useExtendedActionState";
 
 //returns nested form data e.g. credentials[API_KEY]
 function getGroupedFormData(formData: FormData, key: string) {
