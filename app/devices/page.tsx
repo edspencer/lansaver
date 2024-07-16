@@ -1,7 +1,7 @@
 import { getDevices } from "@/models/device";
 
-import { Heading } from "../../components/common/heading";
-import { Button } from "../../components/common/button";
+import { Heading } from "@/components/common/heading";
+import { Button } from "@/components/common/button";
 import DevicesTable from "@/components/device/table";
 import NoContentYet from "@/components/no-content-yet";
 

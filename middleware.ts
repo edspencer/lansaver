@@ -3,6 +3,8 @@ import { auth } from "@/auth";
 import { apiAuthPrefix, authRoutes } from "./routes";
 
 export default auth((req) => {
+  return;
+
   const isLoggedIn = !!req.auth;
   const isAuthAPI = req.url.startsWith(apiAuthPrefix);
 

@@ -2,8 +2,7 @@ import { Heading } from "@/components/common/heading";
 import { Button } from "@/components/common/button";
 
 import { notFound } from "next/navigation";
-import DeviceForm from "@/components/device/form";
-import { updateDeviceAction } from "@/app/actions/devices";
+import { EditForm } from "@/components/device/form";
 import { getDevice } from "@/models/device";
 
 export default async function EditDevicePage({ params: { id } }: { params: { id: string } }) {
@@ -23,9 +22,7 @@ export default async function EditDevicePage({ params: { id } }: { params: { id:
           </Button>
         </div>
       </div>
-      <DeviceForm device={device} formAction={updateDeviceAction} />
-      {/* <p>{state.message}</p>
-      <pre>{JSON.stringify(state.error, null, 4)}</pre> */}
+      <EditForm device={device} />
     </div>
   );
 }

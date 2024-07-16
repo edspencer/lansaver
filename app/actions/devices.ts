@@ -4,16 +4,9 @@ import { createDevice, deleteDevice, updateDevice } from "@/models/device";
 
 import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
-import type { Device } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-export type CreateDeviceAction = {
-  success?: boolean;
-  message: string;
-  device?: Device;
-  error?: any;
-};
+import type { GenericServerAction } from "@/lib/actions";
 
 //returns nested form data e.g. credentials[API_KEY]
 function getGroupedFormData(formData: FormData, key: string) {
@@ -30,7 +23,10 @@ function getGroupedFormData(formData: FormData, key: string) {
   return groupData;
 }
 
-export async function updateDeviceAction(formData: FormData): Promise<CreateDeviceAction> {
+export async function updateDeviceAction(
+  prevState: GenericServerAction,
+  formData: FormData
+): Promise<GenericServerAction> {
   try {
     console.log("updateDeviceAction");
 
@@ -41,13 +37,12 @@ export async function updateDeviceAction(formData: FormData): Promise<CreateDevi
     revalidatePath(`/devices/${id}`);
   } catch (error) {
     console.log(`zod error: ${error instanceof ZodError}`);
-    console.log(error);
 
     if (error instanceof ZodError) {
       return {
         success: false,
         message: "Validation Error",
-        error: {
+        validationError: {
           issues: error.issues,
         },
       };
@@ -60,7 +55,11 @@ export async function updateDeviceAction(formData: FormData): Promise<CreateDevi
     };
   }
 
-  redirect(`/devices/${formData.get("id")}`);
+  return {
+    success: true,
+    message: "Device Updated Successfully",
+    redirect: `/devices/${formData.get("id")}`,
+  };
 }
 
 function getDeviceDataFromFormData(formData: FormData): Prisma.DeviceCreateInput {
@@ -75,7 +74,7 @@ function getDeviceDataFromFormData(formData: FormData): Prisma.DeviceCreateInput
   };
 }
 
-export async function createDeviceAction(prevState: any, formData: FormData): Promise<CreateDeviceAction> {
+export async function createDeviceAction(prevState: any, formData: FormData): Promise<GenericServerAction> {
   try {
     console.log("createDeviceAction");
 
@@ -87,7 +86,8 @@ export async function createDeviceAction(prevState: any, formData: FormData): Pr
     return {
       success: true,
       message: "Device Created Successfully",
-      device,
+      payload: { device },
+      redirect: `/devices/${device.id}`,
     };
   } catch (error) {
     console.log(`zod error: ${error instanceof ZodError}`);
@@ -97,7 +97,7 @@ export async function createDeviceAction(prevState: any, formData: FormData): Pr
       return {
         success: false,
         message: "Validation Error",
-        error: {
+        validationError: {
           issues: error.issues,
         },
       };
@@ -130,8 +130,11 @@ export async function deleteDeviceAction(id: number) {
     };
   }
 
+  revalidatePath("/devices");
+
   return {
     success: true,
     message: "Device Deleted Successfully",
+    redirect: "/devices",
   };
 }

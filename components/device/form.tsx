@@ -3,12 +3,41 @@ import type { Device } from "@prisma/client";
 import { SubmitButton } from "@/components/device/buttons";
 
 import { useState } from "react";
-
 import { Input } from "@/components/common/input";
 import { Select } from "@/components/common/select";
-import { Field, Label, Description } from "@/components/common/fieldset";
+import { Field, Label, Description, ErrorMessage } from "@/components/common/fieldset";
+import { updateDeviceAction, createDeviceAction } from "@/app/actions/devices";
+import { useExtendedActionState } from "@/lib/useExtendedActionState";
 
-export default function DeviceForm({ device, formAction }: { device?: Device; formAction: any }) {
+export function EditForm({ device }: { device: Device }) {
+  const [, formAction] = useExtendedActionState(updateDeviceAction, {});
+
+  return <DeviceForm device={device} formAction={formAction} />;
+}
+
+export function CreateForm() {
+  const [state, formAction] = useExtendedActionState(createDeviceAction, {});
+
+  return <DeviceForm formAction={formAction} errors={state.validationError?.issues} />;
+}
+
+const fieldHasError = (errors: any[], field: string): boolean => {
+  return !!errorForField(errors, field);
+};
+
+const errorForField = (errors: any[], field: string) => {
+  return errors.find((e) => e.path[0] === field);
+};
+
+export default function DeviceForm({
+  device,
+  formAction,
+  errors = [],
+}: {
+  device?: Device;
+  formAction: any;
+  errors?: any[];
+}) {
   const [type, setType] = useState(device?.type || "opnsense");
 
   return (
@@ -24,7 +53,13 @@ export default function DeviceForm({ device, formAction }: { device?: Device; fo
       <Field>
         <Label>Hostname</Label>
         <Description>Host name or IP address of the server to back up</Description>
-        <Input name="hostname" placeholder="http://192.168.1.1" defaultValue={device?.hostname} />
+        <Input
+          invalid={fieldHasError(errors, "hostname")}
+          name="hostname"
+          placeholder="http://192.168.1.1"
+          defaultValue={device?.hostname}
+        />
+        <ErrorMessage>{errorForField(errors, "hostname")?.message}</ErrorMessage>
       </Field>
       {type === "opnsense" && <OPNSenseFields device={device} />}
       {type === "hass" && <HomeAssistantFields device={device} />}

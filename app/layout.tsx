@@ -33,6 +33,9 @@ import { StackedLayout } from "../components/common/stacked-layout";
 import { ArrowRightStartOnRectangleIcon, Cog8ToothIcon } from "@heroicons/react/16/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import SignOutButton from "../components/common/signout-button";
 import { NavLinks, SidebarLinks } from "@/components/navitems";
 
@@ -93,6 +96,7 @@ export default function RootLayout({
           }
         >
           <Providers>{children}</Providers>
+          <ToastContainer />
         </StackedLayout>
       </body>
     </html>

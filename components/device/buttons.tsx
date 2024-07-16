@@ -7,6 +7,8 @@ import { backupDeviceAction } from "../../app/actions/backups";
 import { useFormStatus } from "react-dom";
 import type { Device } from "@prisma/client";
 
+import { useGenericAction } from "@/lib/useExtendedActionState";
+
 export function BackupDeviceForm({ device }: { device: Device }) {
   return (
     <form action={backupDeviceAction.bind(null, device.id)}>
@@ -16,10 +18,7 @@ export function BackupDeviceForm({ device }: { device: Device }) {
 }
 
 export function BackupDeviceButton() {
-  const formState = useFormStatus();
-
-  console.log(formState);
-  const { pending } = formState;
+  const { pending } = useFormStatus();
 
   return (
     <Button aria-disabled={pending} color="zinc" type="submit">
@@ -30,8 +29,10 @@ export function BackupDeviceButton() {
 }
 
 export function DeleteDeviceButton({ device }: { device: Device }) {
+  const action = useGenericAction(deleteDeviceAction, device.id);
+
   return (
-    <Button onClick={() => deleteDeviceAction(device.id)} color="red">
+    <Button onClick={action} color="red">
       Delete
     </Button>
   );

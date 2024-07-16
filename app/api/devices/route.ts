@@ -32,29 +32,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// export async function POST(req: NextRequest) {
-//   try {
-//     const body = await req.json();
-//     const { type, hostname, credentials } = body;
-
-//     if (!type || !hostname || !credentials) {
-//       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-//     }
-
-//     const newDevice = await prisma.device.create({
-//       data: {
-//         type,
-//         hostname,
-//         credentials,
-//       },
-//     });
-
-//     return NextResponse.json(newDevice, { status: 201 });
-//   } catch (error) {
-//     return NextResponse.json({ error: "Failed to create device" }, { status: 500 });
-//   }
-// }
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
