@@ -19,6 +19,10 @@ export async function getDevices() {
   return devices.map((device) => ({ ...device, credentials: decrypt(device.credentials) }));
 }
 
+export async function getDeviceCount() {
+  return await prisma.device.count();
+}
+
 export async function createDevice(data: Prisma.DeviceCreateInput) {
   DeviceSchema.parse(data);
   return await prisma.device.create({ data: encryptedData(data) });

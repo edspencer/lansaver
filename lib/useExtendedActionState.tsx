@@ -97,7 +97,6 @@ export type GenericServerAction = {
  */
 export function wrapServerAction(action: Function, router: any, ...otherArgs: any[]) {
   return async (...args: any[]) => {
-    console.log(...(otherArgs || []), ...args);
     const result = await action(...(otherArgs || []), ...args);
     processGenericResponse(result, router);
 

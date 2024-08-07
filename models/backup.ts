@@ -63,6 +63,18 @@ export async function deleteBackup(id: number) {
   return await prisma.backup.delete({ where: { id } });
 }
 
+export async function getFailedBackupsCount() {
+  return await prisma.backup.count({ where: { status: BackupState.Failed } });
+}
+
+export async function getBackupsDiskUsage() {
+  return (
+    await prisma.backup.aggregate({
+      _sum: { bytes: true },
+    })
+  )._sum.bytes;
+}
+
 export async function deleteAllBackups() {
   return await prisma.backup.deleteMany({});
 }

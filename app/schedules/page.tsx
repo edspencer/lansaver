@@ -1,7 +1,7 @@
-import { Heading } from "../../components/common/heading";
-import { Button } from "../../components/common/button";
+import { Heading } from "@/components/common/heading";
+import { Button } from "@/components/common/button";
 import { SchedulesTable } from "@/components/schedule/table";
-import { getSchedules } from "../../models/schedule";
+import { getSchedules } from "@/models/schedule";
 import NoContentYet from "@/components/no-content-yet";
 
 export default async function Schedules() {
@@ -21,7 +21,3 @@ export default async function Schedules() {
     </div>
   );
 }
-
-const NoSchedules = () => {
-  return <div className="flex items-center justify-center h-48 text-gray-500">No schedules found</div>;
-};

@@ -7,11 +7,12 @@ import { backupDeviceAction } from "../../app/actions/backups";
 import { useFormStatus } from "react-dom";
 import type { Device } from "@prisma/client";
 
-import { useGenericAction } from "@/lib/useExtendedActionState";
+import { useGenericAction, useExtendedActionState } from "@/lib/useExtendedActionState";
 
 export function BackupDeviceForm({ device }: { device: Device }) {
+  const [, formAction] = useExtendedActionState(backupDeviceAction, {}, device.id);
   return (
-    <form action={backupDeviceAction.bind(null, device.id)}>
+    <form action={formAction}>
       <BackupDeviceButton />
     </form>
   );
