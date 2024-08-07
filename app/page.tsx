@@ -6,18 +6,18 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main className="flex flex-col items-center justify-between p-4">
+    <div className="flex flex-col items-center justify-between sm:p-4">
       <div className="w-full max-w-5xl flex flex-col gap-6">
         <h1 className="text-3xl font-bold">LANsaver</h1>
         <p className="text-gray-600">Securely manage and schedule backups for your network devices.</p>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="md:grid md:grid-cols-3 gap-6 flex flex-col">
           <SystemHealth />
           <RecentBackups />
           <QuickAddDevice />
           <BackupSchedules />
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

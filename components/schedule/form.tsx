@@ -30,7 +30,7 @@ export default function ScheduleForm({
           The cron string to use (Use <Link href="http://www.cronmaker.com/">cronmaker.com</Link> if you&apos;re not
           sure)
         </Description>
-        <Input name="cron" placeholder="0 0 * * *" defaultValue={schedule?.name} />
+        <Input name="cron" placeholder="0 0 * * *" defaultValue={schedule?.cron} />
       </Field>
       <DevicesList schedule={schedule} devices={devices} />
       <div className="flex justify-end">
