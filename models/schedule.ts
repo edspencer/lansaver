@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import type { Device, Job } from "@prisma/client";
 
 import prisma from "../lib/prismaClient";
+import ScheduleSchema from "@/lib/validation/schedule";
 
 export async function getSchedules() {
   return await prisma.schedule.findMany();
@@ -26,6 +27,7 @@ export async function getScheduleDevices(id: number): Promise<Device[]> {
 }
 
 export async function updateSchedule(id: number, data: Prisma.ScheduleUpdateInput) {
+  ScheduleSchema.parse(data);
   return await prisma.schedule.update({ where: { id }, data });
 }
 

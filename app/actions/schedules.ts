@@ -5,8 +5,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { Schedule } from "@prisma/client";
-import { createSchedule, deleteSchedule, getSchedule } from "../../models/schedule";
+import { createSchedule, deleteSchedule, getSchedule, updateSchedule } from "../../models/schedule";
 import { createAndExecuteJobForSchedule } from "../../lib/service/jobs";
+import { GenericServerAction } from "@/lib/useExtendedActionState";
 
 export type CreateScheduleAction = {
   success?: boolean;
@@ -59,41 +60,39 @@ export async function createScheduleAction(prevState: any, formData: FormData): 
   }
 }
 
-export async function updateScheduleAction(prevState: any, formData: FormData): Promise<CreateScheduleAction> {
+export async function updateScheduleAction(prevState: any, formData: FormData): Promise<GenericServerAction> {
   try {
     console.log("updateScheduleAction");
 
-    //   const id = Number(formData.get("id"));
-    //   const data = getDeviceDataFromFormData(formData);
-    //   await updateDevice(id, data);
+    const id = Number(formData.get("id"));
+    const data = getScheduleDataFromFormData(formData);
+    await updateSchedule(id, data);
 
-    //   revalidatePath(`/devices/${id}`);
+    revalidatePath(`/devices/${id}`);
   } catch (error) {
-    //   console.log(`zod error: ${error instanceof ZodError}`);
-    //   console.log(error);
-    //   if (error instanceof ZodError) {
-    //     return {
-    //       success: false,
-    //       message: "Validation Error",
-    //       error: {
-    //         issues: error.issues,
-    //       },
-    //     };
-    //   }
-    //   return {
-    //     success: false,
-    //     message: "Failed to update device",
-    //     error: JSON.stringify(error),
-    //   };
+    console.log(`zod error: ${error instanceof ZodError}`);
+    console.log(error);
+    if (error instanceof ZodError) {
+      return {
+        success: false,
+        message: "Validation Error",
+        error: {
+          issues: error.issues,
+        },
+      };
+    }
+    return {
+      success: false,
+      message: "Failed to update device",
+      error: JSON.stringify(error),
+    };
   }
 
   return {
-    success: false,
-    message: "Failed to update device",
-    error: "asdf", //JSON.stringify(error),
-  } as CreateScheduleAction;
-
-  redirect(`/schedules/${formData.get("id")}`);
+    success: true,
+    message: "Schedule Updated Successfully",
+    redirect: `/schedules/${formData.get("id")}`,
+  };
 }
 
 //error conditions:

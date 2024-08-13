@@ -1,6 +1,8 @@
+"use client";
+
 import { ArrowDownTrayIcon, ArrowPathIcon } from "@heroicons/react/16/solid";
 import { DeleteBackupForm } from "@/components/backup/delete";
-import BackupLogsButton from "@/components/backup/logs";
+import BackupLogsButton from "@/components/backup/LogActions";
 import bytes from "bytes";
 import { Button } from "@/components/common/button";
 import { Table, TableBody, TableCell, TableHead, TableRow, TableHeader } from "@/components/common/table";
@@ -10,13 +12,32 @@ import type { BackupWithDevice } from "@/models/backup";
 import StatusBadge from "./statusbadge";
 import { formatDistanceToNow } from "date-fns";
 
-export default function BackupsTable({
+import { useInformAI } from "inform-ai";
+
+const prompt =
+  "This table displays a list of backups taken for various devices. The data will be provided to you in JSON format";
+
+export function BackupsTable({
   backups,
   showDevice = false,
+  condensed = false,
 }: {
   backups: BackupWithDevice[];
   showDevice?: boolean;
+  condensed?: boolean;
 }) {
+  useInformAI({
+    name: "Backups Table",
+    prompt,
+    props: {
+      backups,
+    },
+  });
+
+  if (condensed) {
+    return <CondensedBackupsTable backups={backups} showDevice={showDevice} />;
+  }
+
   return (
     <Table dense>
       <TableHead>

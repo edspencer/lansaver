@@ -1,14 +1,14 @@
 "use client";
 
 import type { Device, Schedule } from "@prisma/client";
-import { useFormState } from "react-dom";
+import { useExtendedActionState } from "@/lib/useExtendedActionState";
 import ScheduleForm from "@/components/schedule/form";
 import { Button } from "@/components/common/button";
 import { Heading } from "@/components/common/heading";
 import { updateScheduleAction } from "@/app/actions/schedules";
 
 export default function CreateScheduleForm({ schedule, devices }: { schedule: Schedule; devices: Device[] }) {
-  const [state, formAction] = useFormState(updateScheduleAction, {});
+  const [state, formAction] = useExtendedActionState(updateScheduleAction, { success: false });
 
   return (
     <div>

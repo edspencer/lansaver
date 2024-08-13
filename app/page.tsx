@@ -49,7 +49,7 @@ async function SystemHealth() {
   );
 }
 
-import { CondensedBackupsTable } from "@/components/backup/table";
+import { BackupsTable } from "@/components/backup/table";
 import { getBackupsDiskUsage, getFailedBackupsCount, getPaginatedBackups } from "@/models/backup";
 async function RecentBackups() {
   const { backups, total } = await getPaginatedBackups({ includeDevice: true, page: 1, perPage: 5 });
@@ -57,7 +57,7 @@ async function RecentBackups() {
   return (
     <DashboardCard heading="Recent Backups" width={2}>
       <div className="flex flex-col gap-4">
-        <CondensedBackupsTable showDevice={true} backups={backups} />
+        <BackupsTable condensed={true} showDevice={true} backups={backups} />
         <div>
           <Button href="/backups">View All Backups ({total})</Button>
         </div>

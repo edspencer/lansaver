@@ -1,4 +1,4 @@
-import BackupsTable from "@/components/backup/table";
+import { BackupsTable } from "@/components/backup/table";
 import { Heading } from "@/components/common/heading";
 import { getPaginatedBackups } from "@/models/backup";
 import PaginationBar from "@/components/pagination-bar";

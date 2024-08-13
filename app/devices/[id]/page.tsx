@@ -5,7 +5,7 @@ import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/componen
 import { Heading, Subheading } from "@/components/common/heading";
 import { Button } from "@/components/common/button";
 import { BackupDeviceForm, DeleteDeviceButton } from "@/components/device/buttons";
-import BackupsTable from "@/components/backup/table";
+import { BackupsTable } from "@/components/backup/table";
 
 import { getDevice, getDeviceBackups } from "@/models/device";
 

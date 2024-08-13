@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
 import { Inter } from "next/font/google";
+
+import { AI, InformAI } from "./actions/AI";
+
+import "inform-ai/dist/main.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -45,6 +49,9 @@ const navItems = [
   { label: "Schedules", href: "/schedules" },
   { label: "Backups", href: "/backups" },
 ];
+
+import { CurrentState } from "inform-ai";
+import { ChatWrapper } from "@/components/ai/ChatWrapper";
 
 export default function RootLayout({
   children,
@@ -95,7 +102,15 @@ export default function RootLayout({
             </Sidebar>
           }
         >
-          <Providers>{children}</Providers>
+          <Providers>
+            <AI>
+              <InformAI>
+                {children}
+                <ChatWrapper className="fixed bottom-10 right-3 max-h-1/3 w-1/4" />
+                <CurrentState className="fixed top-20 right-3 h-1/2 overflow-auto w-1/5" />
+              </InformAI>
+            </AI>
+          </Providers>
           <ToastContainer />
         </StackedLayout>
       </body>

@@ -61,7 +61,7 @@ export type GenericServerAction = {
   success: boolean;
   message?: string;
   redirect?: string;
-  error?: string;
+  error?: any;
   validationError?: any;
   payload?: any;
 };
