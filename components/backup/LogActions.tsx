@@ -7,7 +7,7 @@ import type { Backup } from "@prisma/client";
 
 import { DocumentTextIcon } from "@heroicons/react/16/solid";
 
-import { Logs } from "./Logs";
+import { useInformAI } from "inform-ai";
 
 const fetchBackupLogs = async (id: number) => {
   const response = await fetch(`/api/backups/${id}/logs`);
@@ -62,3 +62,21 @@ export default function BackupLogs({ backup }: { backup: Backup }) {
     </>
   );
 }
+
+export const Logs = ({ logLines, backup }: { logLines: string; backup?: Backup }) => {
+  useInformAI({
+    name: "Logs",
+    prompt: "This component displays backup logs in a monospace font",
+    props: { logLines, backup },
+  });
+
+  return (
+    <div className="font-mono text-sm">
+      {logLines.split("\n").map((line, index) => (
+        <p key={index} className={line.split(" ")[2]?.includes("error:") ? "text-red-500" : ""}>
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+};

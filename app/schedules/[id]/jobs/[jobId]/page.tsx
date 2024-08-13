@@ -8,7 +8,7 @@ import { Button } from "@/components/common/button";
 import { getJobLogs } from "@/lib/runner/logger";
 
 import { BackupsTable } from "@/components/backup/table";
-import { Logs } from "@/components/backup/Logs";
+import { Logs } from "@/components/backup/LogActions";
 import { TextLink } from "@/components/common/text";
 
 export default async function JobDetailsPage({ params: { id, jobId } }: { params: { id: string; jobId: string } }) {
