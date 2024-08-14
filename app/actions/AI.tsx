@@ -1,17 +1,17 @@
 "use server";
 
-import { createAI, getMutableAIState, streamUI, createStreamableValue } from "ai/rsc";
+import { getMutableAIState } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
 import { streamMulti } from "ai-stream-multi";
 import { Spinner } from "@/components/common/spinner";
 
-import { createInformAI, AssistantMessage } from "inform-ai";
-import { CoreMessage, generateId } from "ai";
+import { AssistantMessage } from "inform-ai";
+import { generateId } from "ai";
+
+import { ClientMessage } from "../providers/AI";
 
 export async function submitUserMessage(messages: ClientMessage[]) {
-  "use server";
-
-  const aiState = getMutableAIState<typeof AI>();
+  const aiState = getMutableAIState();
 
   //add the new messages to the AI State so the user can refresh and not lose the context
   aiState.update({
@@ -30,7 +30,18 @@ export async function submitUserMessage(messages: ClientMessage[]) {
     of components that can send events and have states. The user can interact with the components,
     and the components can send events to the assistant. Messages sent from components will usually
     have a unique componentId, may have a human-friendly name, may also have a self-description that
-    is intended to help you understand what the component does
+    is intended to help you understand what the component does.
+
+    This application is called LANsaver, and is a tool that helps users back up the configurations
+    of network devices such as routers, firewalls, switches and Home Assistant instances. It has the
+    following features:
+
+    - CRUD operations for Devices - user can specify the hostname, type and credentials for the device
+    - Backup operations - user can back up the configuration of a Device. The Backup is stored as a file,
+      and has logs that the user can view
+    - Schedule operations - user CRUD Schedules, which apply to a subset of devices and run on a cron schedule
+    - Job operations - user can see the status of a job, and see the logs of a job. A Job is a collection of 
+      Backup operations, and is associated with a Schedule.
     
     Components can also send events, which are messages that describe something that happened in the
     interface, like the user clicking something, or some other event.
@@ -108,36 +119,3 @@ export async function submitUserMessage(messages: ClientMessage[]) {
     content: result.ui.value,
   };
 }
-
-export type ClientMessage = CoreMessage & {
-  id: string;
-};
-
-export type AIState = {
-  chatId: string;
-  messages: ClientMessage[];
-};
-
-export type UIState = {
-  id: string;
-  role?: string;
-  content: React.ReactNode;
-}[];
-
-export const AI = createAI<AIState, UIState>({
-  actions: {
-    submitUserMessage,
-  },
-  initialUIState: [] as UIState,
-  initialAIState: { chatId: generateId(), messages: [] } as AIState,
-});
-
-export const InformAI = createInformAI({
-  // vercel: AI,
-  onEvent: (message: string) => {
-    // Custom logic to send a message to an LLM
-    //this is happening on the server
-    console.log(`Custom send message: ${message}`);
-    console.log(JSON.stringify(message, null, 4));
-  },
-});

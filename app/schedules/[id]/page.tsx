@@ -10,6 +10,10 @@ import DevicesTable from "@/components/device/table";
 import { JobsTable } from "@/components/job/table";
 import NoContentYet from "@/components/no-content-yet";
 
+import { InformAI } from "inform-ai";
+
+const prompt = `A page that shows the details of a schedule. It should show the schedule's configuration, the devices in the schedule, and recent jobs for the schedule. It should also have buttons to run the schedule, edit the schedule, and delete the schedule.`;
+
 export default async function SchedulePage({ params: { id } }: { params: { id: string } }) {
   const schedule = await getSchedule(parseInt(id, 10));
 
@@ -22,6 +26,7 @@ export default async function SchedulePage({ params: { id } }: { params: { id: s
 
   return (
     <div className="flex flex-col gap-8">
+      <InformAI name="Schedule Detail Page" prompt={prompt} props={{ schedule, devices, jobs }} />
       <div className="flex w-full flex-wrap items-end justify-between">
         <Heading>Schedule Details</Heading>
         <div className="flex gap-4">

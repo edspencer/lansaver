@@ -1,6 +1,6 @@
 "use client";
 
-import type { AI } from "@/app/actions/AI";
+import type { AIProvider } from "@/app/providers/AI";
 
 import { useActions, useUIState } from "ai/rsc";
 import { generateId } from "ai";
@@ -11,7 +11,7 @@ import { Messages, UserMessage, ChatBox, useInformAIContext, dedupeMessages, map
 export function ChatWrapper({ className }: { className?: string }) {
   const { submitUserMessage } = useActions();
   const { popRecentMessages } = useInformAIContext();
-  const [messages, setMessages] = useUIState<typeof AI>();
+  const [messages, setMessages] = useUIState<typeof AIProvider>();
 
   async function onMessage(message: string) {
     const componentMessages = popRecentMessages();

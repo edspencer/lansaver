@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 
 import { Inter } from "next/font/google";
 
-import { AI, InformAI } from "./actions/AI";
+import AIProviders from "./providers/AI";
 
 import "inform-ai/dist/main.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-import Providers from "./providers";
+import Providers from "./providers/ReactQuery";
 
 export const metadata: Metadata = {
   title: "LANsaver",
@@ -103,13 +103,11 @@ export default function RootLayout({
           }
         >
           <Providers>
-            <AI>
-              <InformAI>
-                {children}
-                <ChatWrapper className="fixed bottom-10 right-3 max-h-1/3 w-1/4" />
-                <CurrentState className="fixed top-20 right-3 h-1/2 overflow-auto w-1/5" />
-              </InformAI>
-            </AI>
+            <AIProviders>
+              {children}
+              <ChatWrapper className="fixed bottom-10 right-3 max-h-1/3 w-1/4" />
+              <CurrentState className="fixed top-20 right-3 h-1/2 overflow-auto w-1/5" />
+            </AIProviders>
           </Providers>
           <ToastContainer />
         </StackedLayout>
