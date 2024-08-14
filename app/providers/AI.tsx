@@ -29,7 +29,6 @@ export const AIProvider = createAI<AIState, UIState>({
 });
 
 export const InformAIProvider = createInformAI({
-  // vercel: AI,
   onEvent: (message: string) => {
     // Custom logic to send a message to an LLM
     //this is happening on the server

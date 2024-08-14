@@ -1,6 +1,19 @@
 import { z } from "zod";
+import { Redirect } from "@/components/redirect";
 
-const pages = ["/", "/schedules", "/devices", "/schedules/:id", "/devices/:id", "/backups"];
+//list of all of the pages that the LLM can redirect the user to
+const pages = [
+  "/",
+  "/schedules",
+  "/schedules/create",
+  "/schedules/:id",
+  "/schedules/:id/edit",
+  "/devices",
+  "/devices/create",
+  "/devices/:id",
+  "/devices/:id/edit",
+  "/backups",
+];
 
 const RedirectTool = {
   description:
@@ -8,14 +21,10 @@ const RedirectTool = {
     pages.join(", "),
   parameters: z.object({
     url: z.string().describe("The URL to redirect to"),
+    message: z.string().optional().describe("A message to show to the user before redirecting"),
   }),
-  generate: ({ url }: { url: string }) => {
-    console.log("RedirectTool", url);
-
-    return {
-      type: "redirect",
-      url,
-    };
+  generate: function ({ url, message }: { url: string; message?: string }) {
+    return <Redirect url={url} message={message} />;
   },
 };
 
