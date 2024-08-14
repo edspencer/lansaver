@@ -40,8 +40,12 @@ export async function deleteDevice(id: number) {
   return await prisma.device.delete({ where: { id } });
 }
 
-export async function getDeviceBackups(id: number) {
-  return await prisma.backup.findMany({ where: { deviceId: id }, orderBy: { createdAt: "desc" } });
+export async function getDeviceByHostname(hostname: string) {
+  return await prisma.device.findFirst({ where: { hostname: { contains: hostname } } });
+}
+
+export async function getDeviceBackups(id: number, { take }: { take?: number } = {}) {
+  return await prisma.backup.findMany({ where: { deviceId: id }, orderBy: { createdAt: "desc" }, take });
 }
 
 function encryptedData(data: any) {

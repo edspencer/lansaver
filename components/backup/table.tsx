@@ -18,16 +18,18 @@ const prompt =
   "This table displays a list of backups taken for various devices. The data will be provided to you in JSON format";
 
 export function BackupsTable({
+  name = "Backups Table",
   backups,
   showDevice = false,
   condensed = false,
 }: {
+  name?: string;
   backups: BackupWithDevice[];
   showDevice?: boolean;
   condensed?: boolean;
 }) {
   useInformAI({
-    name: "Backups Table",
+    name,
     prompt,
     props: {
       backups,

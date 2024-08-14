@@ -10,6 +10,9 @@ import { generateId } from "ai";
 
 import { ClientMessage } from "../providers/AI";
 
+import RedirectTool from "../tools/Redirect";
+import BackupsTableTool from "../tools/BackupsTable";
+
 export async function submitUserMessage(messages: ClientMessage[]) {
   const aiState = getMutableAIState();
 
@@ -110,7 +113,8 @@ export async function submitUserMessage(messages: ClientMessage[]) {
       aiState.done(aiState.get());
     },
     tools: {
-      // firewallTable: FirewallsTableTool,
+      redirect: RedirectTool,
+      backupsTable: BackupsTableTool,
     },
   });
 
