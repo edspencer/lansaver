@@ -28,7 +28,7 @@
     "crypto": "^1.0.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.2.6",
-    "inform-ai": "^0.1.0",
+    "inform-ai": "^0.2.3",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.18",
     "node-fetch": "2.7.0",

@@ -7,7 +7,7 @@ import { Spinner } from "@/components/common/spinner";
 import { AssistantMessage } from "inform-ai";
 import { generateId } from "ai";
 
-import { AIState, ClientMessage } from "../providers/AI";
+import { ClientMessage } from "../providers/AI";
 
 import RedirectTool from "../tools/Redirect";
 import BackupsTableTool from "../tools/BackupsTable";
