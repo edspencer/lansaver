@@ -1,14 +1,13 @@
 "use server";
 
-import { getMutableAIState } from "ai/rsc";
+import { getMutableAIState, streamUI } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
-import { streamMulti } from "ai-stream-multi";
 import { Spinner } from "@/components/common/spinner";
 
 import { AssistantMessage } from "inform-ai";
 import { generateId } from "ai";
 
-import { ClientMessage } from "../providers/AI";
+import { AIState, ClientMessage } from "../providers/AI";
 
 import RedirectTool from "../tools/Redirect";
 import BackupsTableTool from "../tools/BackupsTable";
@@ -24,7 +23,7 @@ export async function submitUserMessage(messages: ClientMessage[]) {
 
   //set up our streaming LLM response, with a couple of tools, a prompt and some onSegment logic
   //to add any tools and text responses from the LLM to the AI State
-  const result = await streamMulti({
+  const result = await streamUI({
     model: openai("gpt-4o-2024-08-06"),
     initial: <Spinner />,
     system: `\
@@ -57,60 +56,18 @@ export async function submitUserMessage(messages: ClientMessage[]) {
         name: message.name,
       })),
     ],
-    textComponent: AssistantMessage,
-    onSegment: (segment: any) => {
-      if (segment.type === "tool-call") {
-        const { args, toolName } = segment.toolCall;
-
-        const toolCallId = generateId();
-
-        const toolCall = {
-          id: generateId(),
-          role: "assistant",
-          content: [
-            {
-              type: "tool-call",
-              toolName,
-              toolCallId,
-              args,
-            },
-          ],
-        } as ClientMessage;
-
-        const toolResult = {
-          id: generateId(),
-          role: "tool",
-          content: [
-            {
-              type: "tool-result",
-              toolName,
-              toolCallId,
-              result: args,
-            },
-          ],
-        } as ClientMessage;
-
+    text: ({ content, done }) => {
+      if (done) {
         aiState.update({
           ...aiState.get(),
-          messages: [...aiState.get().messages, toolCall, toolResult],
+          messages: [...aiState.get().messages, { role: "assistant", content }],
         });
-      } else if (segment.type === "text") {
-        const text = segment.text;
 
-        const textMessage = {
-          id: generateId(),
-          role: "assistant",
-          content: text,
-        } as ClientMessage;
-
-        aiState.update({
-          ...aiState.get(),
-          messages: [...aiState.get().messages, textMessage],
-        });
+        // console.log(aiState.get().messages); //if you want to see the message history
+        aiState.done(aiState.get());
       }
-    },
-    onFinish: () => {
-      aiState.done(aiState.get());
+
+      return <AssistantMessage content={content} />;
     },
     tools: {
       redirect: RedirectTool,
@@ -120,6 +77,6 @@ export async function submitUserMessage(messages: ClientMessage[]) {
 
   return {
     id: generateId(),
-    content: result.ui.value,
+    content: result.value,
   };
 }

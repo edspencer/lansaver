@@ -1,11 +1,12 @@
 "use server";
 
-import { createStreamableUI, getMutableAIState } from "ai/rsc";
+import { getMutableAIState } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
+import { streamMulti } from "ai-stream-multi";
 import { Spinner } from "@/components/common/spinner";
 
 import { AssistantMessage } from "inform-ai";
-import { generateId, streamText } from "ai";
+import { generateId } from "ai";
 
 import { ClientMessage } from "../providers/AI";
 
@@ -21,14 +22,11 @@ export async function submitUserMessage(messages: ClientMessage[]) {
     messages: [...aiState.get().messages, ...messages],
   });
 
-  const ui = createStreamableUI(<Spinner />);
-
-  console.log("hmm");
-
   //set up our streaming LLM response, with a couple of tools, a prompt and some onSegment logic
   //to add any tools and text responses from the LLM to the AI State
-  const result = await streamText({
+  const result = await streamMulti({
     model: openai("gpt-4o-2024-08-06"),
+    initial: <Spinner />,
     system: `\
     You are a helpful assistant who can help a user to navigate through information they
     are seeing on their screen. The user interface that that user is looking at has a collection
@@ -59,11 +57,10 @@ export async function submitUserMessage(messages: ClientMessage[]) {
         name: message.name,
       })),
     ],
-    // textComponent: AssistantMessage,
-    onChunk: ({ chunk }) => {
-      console.log(chunk);
-      if (chunk.type === "tool-call") {
-        const { args, toolName } = chunk;
+    textComponent: AssistantMessage,
+    onSegment: (segment: any) => {
+      if (segment.type === "tool-call") {
+        const { args, toolName } = segment.toolCall;
 
         const toolCallId = generateId();
 
@@ -97,8 +94,8 @@ export async function submitUserMessage(messages: ClientMessage[]) {
           ...aiState.get(),
           messages: [...aiState.get().messages, toolCall, toolResult],
         });
-      } else if (chunk.type === "text-delta") {
-        const text = chunk.textDelta;
+      } else if (segment.type === "text") {
+        const text = segment.text;
 
         const textMessage = {
           id: generateId(),
@@ -113,7 +110,6 @@ export async function submitUserMessage(messages: ClientMessage[]) {
       }
     },
     onFinish: () => {
-      console.log("onFinish");
       aiState.done(aiState.get());
     },
     tools: {
@@ -124,6 +120,6 @@ export async function submitUserMessage(messages: ClientMessage[]) {
 
   return {
     id: generateId(),
-    content: ui.value,
+    content: result.ui.value,
   };
 }
