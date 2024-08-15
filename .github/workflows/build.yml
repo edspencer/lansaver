@@ -29,7 +29,7 @@ jobs:
           readme-filepath: ./README.md
 
       - name: Build and push
-        uses: docker/build-push-action@v4.1.1
+        uses: docker/build-push-action@v6.7.0
         with:
           context: .
           file: ./Dockerfile
