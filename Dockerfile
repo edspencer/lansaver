@@ -71,6 +71,9 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Ensure the prisma directory is copied over to the production image
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
 # Copy logs and backups directories with correct ownership
 COPY --from=builder --chown=nextjs:nodejs /app/logs /app/logs
 COPY --from=builder --chown=nextjs:nodejs /app/backups /app/backups
