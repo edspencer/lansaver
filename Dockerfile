@@ -27,6 +27,10 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+# Set default DATABASE_URL for build
+ARG DATABASE_URL=file:./dev.sqlite3
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Generate Prisma Client
 COPY prisma ./prisma
 RUN npx prisma generate
