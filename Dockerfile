@@ -59,7 +59,7 @@ RUN adduser --system --uid 1001 nextjs
 
 # Create the logs and backups directories with appropriate permissions
 RUN mkdir -p /app/logs /app/backups \
-    && chown -R nodejs:nextjs /app/logs /app/backups
+    && chown -R nextjs:nodejs /app/logs /app/backups
 
 COPY --from=builder /app/public ./public
 
