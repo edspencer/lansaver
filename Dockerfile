@@ -32,6 +32,8 @@ ARG DATABASE_URL=file:./dev.sqlite3
 ENV DATABASE_URL=${DATABASE_URL}
 
 # Generate Prisma Client
+COPY prisma ./prisma
+RUN npx prisma generate
 RUN npx prisma migrate deploy
 
 RUN \
