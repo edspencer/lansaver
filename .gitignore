@@ -35,6 +35,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+dk/*
+
 prisma/dev.sqlite3
 
 /backups
