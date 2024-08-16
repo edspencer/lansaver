@@ -36,12 +36,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 RUN npx prisma migrate deploy
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
 
-# Create the logs and backups directories with appropriate permissions
-RUN mkdir -p /app/logs /app/backups \
-    && chown -R nodejs:nextjs /app/logs /app/backups
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
@@ -59,6 +54,13 @@ ENV AUTH_TRUST_HOST true
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Create the logs and backups directories with appropriate permissions
+RUN mkdir -p /app/logs /app/backups \
+    && chown -R nodejs:nextjs /app/logs /app/backups
+
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
