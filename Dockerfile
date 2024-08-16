@@ -36,6 +36,10 @@ COPY prisma ./prisma
 RUN npx prisma generate
 RUN npx prisma migrate deploy
 
+# Create the logs and backups directories with appropriate permissions
+RUN mkdir -p /app/logs /app/backups \
+    && chown -R node:node /app/logs /app/backups
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -67,6 +71,10 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy logs and backups directories with correct ownership
+COPY --from=builder --chown=nextjs:nodejs /app/logs /app/logs
+COPY --from=builder --chown=nextjs:nodejs /app/backups /app/backups
+
 USER nextjs
 
 EXPOSE 3005
@@ -75,4 +83,4 @@ ENV PORT=3005
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD npx prisma migrate deploy && HOSTNAME="0.0.0.0" node server.js
