@@ -39,12 +39,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Push to heroku
-        run: |
-          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=${{ secrets.HEROKU_USER }} --password-stdin registry.heroku.com
-          docker tag ${{ secrets.DOCKERHUB_USER }}/lansaver:latest registry.heroku.com/lansaver/web
-          docker push registry.heroku.com/lansaver/web
-
   release-to-heroku:
     runs-on: ubuntu-latest
     needs: docker
