@@ -41,6 +41,6 @@ jobs:
 
       - name: Push to heroku
         run: |
-          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=$HEROKU_LOGIN --password-stdin registry.heroku.com
+          echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=${{ secrets.HEROKU_USER }} --password-stdin registry.heroku.com
           docker tag ${{ secrets.DOCKERHUB_USER }}/lansaver:latest registry.heroku.com/lansaver/web
           docker push registry.heroku.com/lansaver/web
