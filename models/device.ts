@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Device } from "@prisma/client";
 
 import DeviceSchema from "../lib/validation/device";
 import { encrypt, decrypt } from "@/lib/crypto";
@@ -54,4 +54,8 @@ function encryptedData(data: any) {
 
 export async function deleteAllDevices() {
   return await prisma.device.deleteMany({});
+}
+
+export function deviceHumanName(device: Device = {} as Device) {
+  return device.name || device.hostname || device.type;
 }

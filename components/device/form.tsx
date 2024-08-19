@@ -53,6 +53,15 @@ export default function DeviceForm({
           <option value="lansaver">LANsaver</option>
         </Select>
       </Field>
+      <Field>
+        <Label>Device Name</Label>
+        <Input
+          invalid={fieldHasError(errors, "name")}
+          name="name"
+          placeholder="Optional"
+          defaultValue={device?.name || undefined}
+        />
+      </Field>
       {hasHostname ? (
         <Field>
           <Label>Hostname</Label>

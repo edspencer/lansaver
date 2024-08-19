@@ -32,11 +32,13 @@ export async function updateDeviceAction(
 
     const id = Number(formData.get("id"));
     const data = getDeviceDataFromFormData(formData);
+    console.log(data);
     await updateDevice(id, data);
 
     revalidatePath(`/devices/${id}`);
   } catch (error) {
     console.log(`zod error: ${error instanceof ZodError}`);
+    console.error(error);
 
     if (error instanceof ZodError) {
       return {
@@ -69,6 +71,7 @@ function getDeviceDataFromFormData(formData: FormData): Prisma.DeviceCreateInput
   return {
     type: formData.get("type") as string,
     hostname: formData.get("hostname") as string,
+    name: formData.get("name") as string,
     config: JSON.stringify(config),
     credentials: JSON.stringify(credentials),
   };

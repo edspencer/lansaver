@@ -6,6 +6,7 @@ const DeviceSchema = z
   .object({
     type: z.enum([Object.keys(DeviceTypes)[0], ...Object.keys(DeviceTypes)]),
     hostname: z.string().min(2).optional().nullable(),
+    name: z.string().min(2).optional().nullable(),
     config: z.string(),
   })
   .refine(

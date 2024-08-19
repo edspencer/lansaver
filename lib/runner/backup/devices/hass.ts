@@ -34,7 +34,7 @@ async function downloadBackup({
   const { hostname, config = null } = device;
   const { API_KEY } = JSON.parse(config || "{}");
 
-  const downloadUrl = `https://${hostname}:3000/backup/${slug}/download`;
+  const downloadUrl = `https://${hostname}/backup/${slug}/download`;
 
   logger.info(`Downloading backup from ${downloadUrl}`);
 
@@ -86,7 +86,7 @@ export default class HomeAssistantRunner implements BackupRunner {
     const { hostname, config = null } = device;
     const { API_KEY } = JSON.parse(config || "{}");
 
-    const backupUrl = `https://${hostname}:3000/backup`;
+    const backupUrl = `https://${hostname}/backup`;
 
     logger.info(`POSTing to ${backupUrl}`);
 

@@ -105,8 +105,8 @@ export default function RootLayout({
           <Providers>
             <AIProviders>
               {children}
-              <ChatWrapper className="fixed bottom-10 right-3 max-h-[40vh] w-1/4" />
-              <CurrentState className="fixed top-20 right-3 max-h-[50vh] overflow-auto w-1/5" />
+              <ChatWrapper className="fixed bottom-10 right-3 max-h-[40vh] w-1/5" />
+              {/* <CurrentState className="fixed top-20 right-3 max-h-[50vh] overflow-auto" /> */}
             </AIProviders>
           </Providers>
           <ToastContainer />
