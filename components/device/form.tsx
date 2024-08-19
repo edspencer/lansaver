@@ -40,6 +40,8 @@ export default function DeviceForm({
 }) {
   const [type, setType] = useState(device?.type || "opnsense");
 
+  const hasHostname = type !== "lansaver";
+
   return (
     <form className="flex flex-col gap-6" action={formAction}>
       <Field>
@@ -48,19 +50,24 @@ export default function DeviceForm({
           <option value="opnsense">OPNSense</option>
           <option value="hass">Home Assistant</option>
           <option value="tplink">TP Link Managed Switch</option>
+          <option value="lansaver">LANsaver</option>
         </Select>
       </Field>
-      <Field>
-        <Label>Hostname</Label>
-        <Description>Host name or IP address of the server to back up</Description>
-        <Input
-          invalid={fieldHasError(errors, "hostname")}
-          name="hostname"
-          placeholder="http://192.168.1.1"
-          defaultValue={device?.hostname}
-        />
-        <ErrorMessage>{errorForField(errors, "hostname")?.message}</ErrorMessage>
-      </Field>
+      {hasHostname ? (
+        <Field>
+          <Label>Hostname</Label>
+          <Description>Host name or IP address of the server to back up</Description>
+          <Input
+            invalid={fieldHasError(errors, "hostname")}
+            name="hostname"
+            placeholder="http://192.168.1.1"
+            defaultValue={device?.hostname || undefined}
+          />
+          <ErrorMessage>{errorForField(errors, "hostname")?.message}</ErrorMessage>
+        </Field>
+      ) : (
+        <p className="text-sm">No hostname needed for this device type</p>
+      )}
       {type === "opnsense" && <OPNSenseFields device={device} />}
       {type === "hass" && <HomeAssistantFields device={device} />}
       {type === "tplink" && <TPLinkFields device={device} />}

@@ -1,6 +1,6 @@
 import { Backup, Device } from "@prisma/client";
-import { OPNSenseBackupRunner } from "./opnsense";
-import BackupSaver from "../saver";
+import OPNSenseBackupRunner from "./opnsense";
+import BackupSaver from "../../saver";
 
 import fetch from "node-fetch";
 const { Response } = jest.requireActual("node-fetch");

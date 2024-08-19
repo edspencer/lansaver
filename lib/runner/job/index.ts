@@ -1,7 +1,7 @@
 import type { Job, Backup } from "@prisma/client";
 import { Logger } from "winston";
 import { Actor } from "xstate";
-import { BackupRunnerFactory } from "../backup";
+import { BackupRunnerFactory } from "../backup/factory";
 import { getDevice } from "@/models/device";
 
 export async function executeJob({

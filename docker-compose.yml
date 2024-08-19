@@ -5,7 +5,7 @@ services:
     image: edspencer/lansaver:latest
     container_name: lansaver_app
     ports:
-      - "3000:3000"
+      - "3005:3000"
     # Use .env.local to store secrets, not committed to source control
     # Should have AUTH_SECRET (for Auth.js), ENCRYPTION_KEY and OPENAI_API_KEY
     env_file:

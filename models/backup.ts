@@ -1,6 +1,6 @@
 import { Backup, Device, Prisma } from "@prisma/client";
 import { getDevice } from "./device";
-import { BackupRunnerFactory } from "../lib/runner/backup";
+import { BackupRunnerFactory } from "../lib/runner/backup/factory";
 import { logLocationForBackup } from "../lib/runner/logger";
 import { BackupState } from "../lib/stateMachines/backup";
 import prisma from "../lib/prismaClient";

@@ -1,8 +1,8 @@
 import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "./index";
+import { BackupRunner } from "../factory";
 import https from "https";
 import fetch from "node-fetch";
-import BackupSaver from "../saver";
+import BackupSaver from "../../saver";
 
 // Disable SSL verification because Home Assistant usually uses a self-signed certificates
 const agent = new https.Agent({
@@ -68,7 +68,7 @@ async function downloadBackup({
   }
 }
 
-export class HomeAssistantRunner implements BackupRunner {
+export default class HomeAssistantRunner implements BackupRunner {
   //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
   async startBackup({
     device,

@@ -30,6 +30,15 @@ describe("DeviceSchema", () => {
     expect(() => DeviceSchema.parse(device)).toThrow();
   });
 
+  it("should allow lansaver device without a hostname", () => {
+    const device = {
+      type: "lansaver",
+      config: "{}",
+    };
+
+    expect(() => DeviceSchema.parse(device)).not.toThrow();
+  });
+
   it("should fail validation if config is missing", () => {
     const device = {
       type: "hass",
