@@ -10,22 +10,17 @@ import { updateBackup } from "../../../models/backup";
 import { BackupState, backupMachine } from "../../stateMachines/backup";
 import { createActor } from "xstate";
 
+export type StartBackupArgs = {
+  device: Device;
+  backup: Backup;
+  logger: Logger;
+  backupActor: Actor<any>;
+  updateBackup: any;
+  fileSaver: BackupSaver;
+};
+
 export interface BackupRunner {
-  startBackup({
-    device,
-    backup,
-    logger,
-    backupActor,
-    updateBackup,
-    fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: Logger;
-    backupActor: Actor<any>;
-    updateBackup: any;
-    fileSaver: BackupSaver;
-  }): Promise<Backup>;
+  startBackup({ device, backup, logger, backupActor, updateBackup, fileSaver }: StartBackupArgs): Promise<Backup>;
 }
 
 export class BackupRunnerFactory {

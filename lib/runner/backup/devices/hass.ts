@@ -1,7 +1,9 @@
-import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "../factory";
 import https from "https";
 import fetch from "node-fetch";
+
+import type { Device, Backup } from "@prisma/client";
+
+import { BackupRunner, StartBackupArgs } from "../factory";
 import BackupSaver from "../../saver";
 
 // Disable SSL verification because Home Assistant usually uses a self-signed certificates
@@ -77,14 +79,7 @@ export default class HomeAssistantRunner implements BackupRunner {
     backupActor,
     updateBackup,
     fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: any;
-    backupActor: any;
-    updateBackup: any;
-    fileSaver: BackupSaver;
-  }): Promise<Backup> {
+  }: StartBackupArgs): Promise<Backup> {
     logger.info("Starting Home Assistant backup");
     backupActor.send({ type: "START" });
 

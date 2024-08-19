@@ -26,8 +26,8 @@ describe("TPLinkBackupRunner", () => {
 
     device = {
       id: 1,
-      type: "hass",
-      hostname: "homeassistant.local",
+      type: "tplink",
+      hostname: "tplink.local",
       credentials: JSON.stringify({ username, password }),
       config: "{}",
       createdAt: new Date(),

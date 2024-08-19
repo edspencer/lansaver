@@ -1,7 +1,6 @@
-import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "../factory";
 import fetch from "node-fetch";
-import BackupSaver from "../../saver";
+import type { Backup } from "@prisma/client";
+import { BackupRunner, StartBackupArgs } from "../factory";
 
 /**
  * Gets the _tid_ token from the TPLink device by sending a login request to /data/login.json.
@@ -99,14 +98,7 @@ export default class TPLinkRunner implements BackupRunner {
     backupActor,
     updateBackup,
     fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: any;
-    backupActor: any;
-    updateBackup: any;
-    fileSaver: BackupSaver;
-  }): Promise<Backup> {
+  }: StartBackupArgs): Promise<Backup> {
     logger.info("Starting TP Link backup");
     backupActor.send({ type: "START" });
 
