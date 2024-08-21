@@ -4,6 +4,8 @@ import { SchedulesTable } from "@/components/schedule/table";
 import { getSchedules } from "@/models/schedule";
 import NoContentYet from "@/components/no-content-yet";
 
+export const revalidate = 0;
+
 export default async function Schedules() {
   const schedules = await getSchedules();
 
