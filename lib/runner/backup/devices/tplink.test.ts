@@ -1,6 +1,6 @@
 import { Backup, Device } from "@prisma/client";
-import { TPLinkRunner } from "./tplink";
-import BackupSaver from "../saver";
+import TPLinkRunner from "./tplink";
+import BackupSaver from "../../saver";
 
 import fetch from "node-fetch";
 const { Response } = jest.requireActual("node-fetch");
@@ -26,8 +26,8 @@ describe("TPLinkBackupRunner", () => {
 
     device = {
       id: 1,
-      type: "hass",
-      hostname: "homeassistant.local",
+      type: "tplink",
+      hostname: "tplink.local",
       credentials: JSON.stringify({ username, password }),
       config: "{}",
       createdAt: new Date(),

@@ -38,7 +38,7 @@ export function ChatWrapper({ className }: { className?: string }) {
 
   return (
     <div className={clsx("flex flex-col border border-slate-200 rounded-md p-1 bg-white gap-1", className)}>
-      <Messages messages={messages} />
+      <Messages messages={messages} className="overflow-auto" />
       <ChatBox onSubmit={onMessage} />
     </div>
   );

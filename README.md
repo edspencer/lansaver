@@ -13,6 +13,7 @@ Allows users to configure Devices on their network that they wish to back up con
 - OPNSense
 - Home Assistant
 - TP Link Managed Switches
+- LANsaver itself
 
 ## Supported Destinations
 

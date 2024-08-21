@@ -1,7 +1,6 @@
-import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "./index";
 import fetch from "node-fetch";
-import BackupSaver from "../saver";
+import type { Backup } from "@prisma/client";
+import { BackupRunner, StartBackupArgs } from "../factory";
 
 /**
  * Gets the _tid_ token from the TPLink device by sending a login request to /data/login.json.
@@ -12,7 +11,7 @@ async function getAuthToken({
   password,
   logger,
 }: {
-  hostname: string;
+  hostname: string | null;
   username: string;
   password: string;
   logger: any;
@@ -59,7 +58,15 @@ async function getAuthToken({
  * Destroys the session by sending a POST request to /data/logout.json.
  * This way we don't leave the session hanging around.
  */
-async function destroySession({ hostname, logger, authToken }: { hostname: string; logger: any; authToken: string }) {
+async function destroySession({
+  hostname,
+  logger,
+  authToken,
+}: {
+  hostname: string | null;
+  logger: any;
+  authToken: string;
+}) {
   logger.info(`Destroying session at ${hostname}`);
 
   const logoutUrl = `http://${hostname}/data/logout.json`;
@@ -83,7 +90,7 @@ async function destroySession({ hostname, logger, authToken }: { hostname: strin
   }
 }
 
-export class TPLinkRunner implements BackupRunner {
+export default class TPLinkRunner implements BackupRunner {
   async startBackup({
     device,
     backup,
@@ -91,14 +98,7 @@ export class TPLinkRunner implements BackupRunner {
     backupActor,
     updateBackup,
     fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: any;
-    backupActor: any;
-    updateBackup: any;
-    fileSaver: BackupSaver;
-  }): Promise<Backup> {
+  }: StartBackupArgs): Promise<Backup> {
     logger.info("Starting TP Link backup");
     backupActor.send({ type: "START" });
 

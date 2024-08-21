@@ -1,16 +1,15 @@
-import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import BackupSaver from "../saver";
-import { Actor } from "xstate";
+
+import type { Backup } from "@prisma/client";
+import { BackupRunner, StartBackupArgs } from "../factory";
 
 // Disable SSL verification because OPNSense usually uses a self-signed certificates
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-export class OPNSenseBackupRunner implements BackupRunner {
+export default class OPNSenseBackupRunner implements BackupRunner {
   async startBackup({
     device,
     backup,
@@ -18,14 +17,7 @@ export class OPNSenseBackupRunner implements BackupRunner {
     backupActor,
     updateBackup,
     fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: any;
-    backupActor: Actor<any>;
-    updateBackup: Function;
-    fileSaver: BackupSaver;
-  }): Promise<Backup> {
+  }: StartBackupArgs): Promise<Backup> {
     let responseText = null;
     backupActor.send({ type: "START" });
 

@@ -7,6 +7,7 @@ import { Text } from "@/components/common/text";
 import { useFormStatus } from "react-dom";
 import { Link } from "@/components/common/link";
 import { Checkbox, CheckboxField, CheckboxGroup } from "../common/checkbox";
+import { deviceHumanName } from "@/models/device";
 
 export default function ScheduleForm({
   schedule,
@@ -65,7 +66,7 @@ function DevicesList({ schedule, devices }: { schedule?: Schedule; devices: Devi
               value={String(device.id)}
               defaultChecked={scheduleDevices?.includes(String(device.id))}
             />
-            <Label>{device.hostname}</Label>
+            <Label>{deviceHumanName(device)}</Label>
           </CheckboxField>
         ))}
       </CheckboxGroup>

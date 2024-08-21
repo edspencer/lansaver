@@ -13,6 +13,7 @@ import StatusBadge from "./statusbadge";
 import { formatDistanceToNow } from "date-fns";
 
 import { useInformAI } from "inform-ai";
+import { deviceHumanName } from "@/models/device";
 
 const prompt =
   "This table displays a list of backups taken for various devices. The data will be provided to you in JSON format";
@@ -83,7 +84,7 @@ const BackupRow = ({ backup, showDevice = false }: { backup: BackupWithDevice; s
       <TableCell>{backup.id}</TableCell>
       {showDevice && (
         <TableCell>
-          <Link href={`/devices/${backup.deviceId}`}>{backup.device?.hostname}</Link>
+          <Link href={`/devices/${backup.deviceId}`}>{deviceHumanName(backup.device)}</Link>
         </TableCell>
       )}
       <TableCell className="font-medium">
@@ -132,7 +133,7 @@ const CondensedBackupRow = ({ backup, showDevice = false }: { backup: BackupWith
     <TableRow key={backup.id} className={backup.status === "failed" ? "bg-red-100" : ""}>
       {showDevice && (
         <TableCell>
-          <Link href={`/devices/${backup.deviceId}`}>{backup.device?.hostname}</Link>
+          <Link href={`/devices/${backup.deviceId}`}>{deviceHumanName(backup.device)}</Link>
         </TableCell>
       )}
       <TableCell>{formatDistanceToNow(backup.createdAt, { addSuffix: true })}</TableCell>

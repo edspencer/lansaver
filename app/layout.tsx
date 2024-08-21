@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 
 import AIProviders from "./providers/AI";
 
-import "inform-ai/dist/main.css";
 import "./globals.css";
+import "inform-ai/dist/main.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -105,8 +105,8 @@ export default function RootLayout({
           <Providers>
             <AIProviders>
               {children}
-              <ChatWrapper className="fixed bottom-10 right-3 max-h-1/3 w-1/4" />
-              <CurrentState className="fixed top-20 right-3 h-1/2 overflow-auto w-1/5" />
+              <ChatWrapper className="fixed bottom-10 right-3 max-h-[40vh] w-1/4" />
+              <CurrentState className="fixed top-20 right-3 max-h-[50vh] overflow-auto w-1/5" />
             </AIProviders>
           </Providers>
           <ToastContainer />

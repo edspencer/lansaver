@@ -1,8 +1,10 @@
-import type { Device, Backup } from "@prisma/client";
-import { BackupRunner } from "./index";
 import https from "https";
 import fetch from "node-fetch";
-import BackupSaver from "../saver";
+
+import type { Device, Backup } from "@prisma/client";
+
+import { BackupRunner, StartBackupArgs } from "../factory";
+import BackupSaver from "../../saver";
 
 // Disable SSL verification because Home Assistant usually uses a self-signed certificates
 const agent = new https.Agent({
@@ -32,7 +34,7 @@ async function downloadBackup({
   const { hostname, config = null } = device;
   const { API_KEY } = JSON.parse(config || "{}");
 
-  const downloadUrl = `https://${hostname}:3000/backup/${slug}/download`;
+  const downloadUrl = `https://${hostname}/backup/${slug}/download`;
 
   logger.info(`Downloading backup from ${downloadUrl}`);
 
@@ -68,7 +70,7 @@ async function downloadBackup({
   }
 }
 
-export class HomeAssistantRunner implements BackupRunner {
+export default class HomeAssistantRunner implements BackupRunner {
   //Basically just fetches the backupUrl and saves it to file, with a bunch of error handling and logging
   async startBackup({
     device,
@@ -77,21 +79,14 @@ export class HomeAssistantRunner implements BackupRunner {
     backupActor,
     updateBackup,
     fileSaver,
-  }: {
-    device: Device;
-    backup: Backup;
-    logger: any;
-    backupActor: any;
-    updateBackup: any;
-    fileSaver: BackupSaver;
-  }): Promise<Backup> {
+  }: StartBackupArgs): Promise<Backup> {
     logger.info("Starting Home Assistant backup");
     backupActor.send({ type: "START" });
 
     const { hostname, config = null } = device;
     const { API_KEY } = JSON.parse(config || "{}");
 
-    const backupUrl = `https://${hostname}:3000/backup`;
+    const backupUrl = `https://${hostname}/backup`;
 
     logger.info(`POSTing to ${backupUrl}`);
 

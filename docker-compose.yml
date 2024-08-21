@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  app:
+    image: edspencer/lansaver:latest
+    container_name: lansaver_app
+    ports:
+      - "3005:3000"
+    # Use .env.local to store secrets, not committed to source control
+    # Should have AUTH_SECRET (for Auth.js), ENCRYPTION_KEY and OPENAI_API_KEY
+    env_file:
+      - .env.local
+    environment:
+      # Customise the locations of the db, logs and backups directories to our volumes
+      DATABASE_URL: file:/app/data/prod.sqlite3
+      LOG_DIRECTORY: /app/custom_logs
+      BACKUPS_DIRECTORY: /app/custom_backups
+    volumes:
+      - ./dk/data:/app/data
+      - ./dk/logs:/app/custom_logs
+      - ./dk/backups:/app/custom_backups
