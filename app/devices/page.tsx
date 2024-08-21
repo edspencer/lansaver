@@ -5,6 +5,8 @@ import { Button } from "@/components/common/button";
 import DevicesTable from "@/components/device/table";
 import NoContentYet from "@/components/no-content-yet";
 
+export const revalidate = 0;
+
 export default async function Devices() {
   const devices = await getDevices();
 

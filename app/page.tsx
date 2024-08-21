@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 // import { SignIn } from "../components/common/signin";
 // import SignOut from "@/components/common/signout-button";
 
+export const revalidate = 0;
+
 export default async function Home() {
   const session = await auth();
 

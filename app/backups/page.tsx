@@ -4,6 +4,8 @@ import { getPaginatedBackups } from "@/models/backup";
 import PaginationBar from "@/components/pagination-bar";
 import NoContentYet from "@/components/no-content-yet";
 
+export const revalidate = 0;
+
 export default async function BackupsPage({ searchParams: { page = 1, perPage = 10 } }) {
   const { backups, total, totalPages } = await getPaginatedBackups({ includeDevice: true, page, perPage });
 
