@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.3.4
+
+### Patch Changes
+
+- a921566: access public for changesets
+
 ## 0.3.3
 
 ### Patch Changes
