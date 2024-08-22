@@ -3,3 +3,4 @@ logs
 backups
 .next
 git
+node_modules
