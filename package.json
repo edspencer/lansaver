@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "vercel-build": "prisma generate && prisma migrate deploy && npx tsx script/dummydata.ts && next build",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "ci:publish": "echo 'No-op!'"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.44",
