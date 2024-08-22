@@ -27,6 +27,7 @@ describe("HomeAssistantBackupRunner", () => {
     device = {
       id: 1,
       type: "hass",
+      name: "Home Assistant",
       hostname: "homeassistant.local",
       config: JSON.stringify({ API_KEY }),
       credentials: "{}",

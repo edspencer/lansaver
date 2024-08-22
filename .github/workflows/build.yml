@@ -2,7 +2,7 @@ name: Build and Publish Docker image
 
 on:
   push:
-    branches: [main, sqlite]
+    branches: [main, changesets]
 
 jobs:
   docker:
@@ -27,6 +27,13 @@ jobs:
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
       #     repository: ${{ secrets.DOCKERHUB_USER }}/lansaver
       #     readme-filepath: ./README.md
+
+      - name: Create GitHub Release
+        uses: changesets/action@v1
+        with:
+          publish: npm run ci:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         uses: docker/build-push-action@v6.7.0

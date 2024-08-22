@@ -31,6 +31,7 @@ import {
 
 import { getDeviceCount } from "@/models/device";
 import bytes from "bytes";
+import { InformAI } from "inform-ai";
 
 async function SystemHealth() {
   const deviceCount = await getDeviceCount();
@@ -39,6 +40,11 @@ async function SystemHealth() {
 
   return (
     <DashboardCard heading="System Health" description="">
+      <InformAI
+        name="SystemHealth"
+        props={{ deviceCount, failedBackupsCount, diskUsage }}
+        prompt="This is a system health report"
+      />
       <DL>
         <DT>Disk Usage</DT>
         <DD>{diskUsage ? bytes(diskUsage) : "0"}</DD>

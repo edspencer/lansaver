@@ -27,6 +27,7 @@ describe("OPNSenseBackupRunner", () => {
     device = {
       id: 1,
       type: "opnsense",
+      name: "Firewall",
       hostname: "opnsense.local",
       credentials: JSON.stringify({ API_KEY, API_SECRET }),
       config: "{}",

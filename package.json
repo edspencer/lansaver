@@ -1,6 +1,6 @@
 {
   "name": "lansaver",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "vercel-build": "prisma generate && prisma migrate deploy && npx tsx script/dummydata.ts && next build",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "ci:publish": "echo 'No-op!'"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.44",
@@ -45,6 +46,7 @@
     "zod-validation-error": "^3.3.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.7",
     "@swc/core": "^1.5.25",
     "@swc/jest": "^0.2.36",
     "@types/bcryptjs": "^2.4.6",
