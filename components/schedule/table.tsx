@@ -5,10 +5,14 @@ import type { Schedule } from "@prisma/client";
 import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 import { Button } from "../common/button";
 import { PencilSquareIcon } from "@heroicons/react/16/solid";
+import { InformAI } from "inform-ai";
+
+const prompt = `This table displays a list of backup schedules, including the name, cron string, and cron description.`;
 
 export function SchedulesTable({ schedules }: { schedules: Schedule[] }) {
   return (
     <Table>
+      <InformAI name="SchedulesTable" props={{ schedules }} prompt={prompt} />
       <TableHead>
         <TableRow>
           <TableHeader>Name</TableHeader>

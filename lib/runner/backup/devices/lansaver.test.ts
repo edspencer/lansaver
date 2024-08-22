@@ -31,6 +31,7 @@ describe("LANsaverBackupRunner", () => {
     device = {
       id: 1,
       type: "lansaver",
+      name: "LANsaver",
       hostname: "lansaver.local",
       credentials: "",
       config: "{}",

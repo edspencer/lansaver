@@ -27,6 +27,7 @@ describe("TPLinkBackupRunner", () => {
     device = {
       id: 1,
       type: "tplink",
+      name: "TPLink Device",
       hostname: "tplink.local",
       credentials: JSON.stringify({ username, password }),
       config: "{}",
