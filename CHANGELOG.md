@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.3.5
+
+### Patch Changes
+
+- 7e2fe7c: More CI
+
 ## 0.3.4
 
 ### Patch Changes
