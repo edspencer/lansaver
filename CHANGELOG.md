@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.3.11
+
+### Patch Changes
+
+- d8ff2c2: Fix pnpm in Docker
+
 ## 0.3.10
 
 ### Patch Changes
