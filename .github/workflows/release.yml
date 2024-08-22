@@ -32,7 +32,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - run: npm install
-        if: steps.npm-cache.outputs.cache-hit != 'true'
 
       - run: npx jest
 
