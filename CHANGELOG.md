@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.3.10
+
+### Patch Changes
+
+- 5e208fb: bump inform-ai
+
 ## 0.3.9
 
 ### Patch Changes
