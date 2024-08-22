@@ -1,10 +1,8 @@
 name: Build and Publish Docker image
 
 on:
-  workflow_run:
-    workflows: ["Release Version"]
-    types:
-      - completed
+  release:
+    types: [published]
 
 jobs:
   debug:
