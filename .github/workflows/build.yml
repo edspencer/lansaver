@@ -5,12 +5,6 @@ on:
     types: [published]
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print GitHub Context
-        run: echo "${{ toJson(github) }}"
-
   docker:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')

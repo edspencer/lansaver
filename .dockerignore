@@ -2,5 +2,9 @@
 logs
 backups
 .next
-git
+.git
 node_modules
+Dockerfile
+docker-compose.tml
+.env.local
+dk
