@@ -1,9 +1,13 @@
 import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "../common/table";
 import type { Device } from "@prisma/client";
+import { InformAI } from "inform-ai";
+
+const prompt = `This table displays a list of devices, including the type, name, and hostname.`;
 
 export default function DevicesTable({ className, devices }: { className?: string; devices: Device[] }) {
   return (
     <Table className={className}>
+      <InformAI name="DevicesTable" props={{ devices }} prompt={prompt} />
       <TableHead>
         <TableRow>
           <TableHeader>Type</TableHeader>
