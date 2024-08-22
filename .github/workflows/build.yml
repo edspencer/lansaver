@@ -28,6 +28,9 @@ jobs:
       #     repository: ${{ secrets.DOCKERHUB_USER }}/lansaver
       #     readme-filepath: ./README.md
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Create GitHub Release
         uses: changesets/action@v1
         with:
