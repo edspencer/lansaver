@@ -28,13 +28,6 @@ jobs:
       #     repository: ${{ secrets.DOCKERHUB_USER }}/lansaver
       #     readme-filepath: ./README.md
 
-      - name: Create GitHub Release
-        uses: changesets/action@v1
-        with:
-          publish: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push
         uses: docker/build-push-action@v6.7.0
         with:
