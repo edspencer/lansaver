@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.3.6
+
+### Patch Changes
+
+- 36c8817: More sad CI fakery
+
 ## 0.3.5
 
 ### Patch Changes
