@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.4.0
+
+### Minor Changes
+
+- cb825cb: Fix changelog, bump InformAI
+
 ## 0.3.0
 
 ### Minor Changes
