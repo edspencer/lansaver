@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { Inter } from "next/font/google";
 
-import AIProviders from "./providers/AI";
+import AIProviders from "@/app/providers/AI";
 
 import "./globals.css";
 import "inform-ai/dist/main.css";
@@ -51,7 +51,7 @@ const navItems = [
 ];
 
 import { CurrentState } from "inform-ai";
-import { ChatWrapper } from "@/components/ai/ChatWrapper";
+import { ChatBot } from "@/components/ai/ChatBot";
 
 export default function RootLayout({
   children,
@@ -105,7 +105,7 @@ export default function RootLayout({
           <Providers>
             <AIProviders>
               {children}
-              <ChatWrapper className="fixed bottom-10 right-3 max-h-[40vh] w-1/4" />
+              <ChatBot className="fixed bottom-10 right-3 max-h-[40vh] w-1/4 flex flex-col border border-slate-200 rounded-md p-1 bg-white gap-1" />
               <CurrentState className="fixed top-20 right-3 max-h-[50vh] overflow-auto w-1/5" />
             </AIProviders>
           </Providers>

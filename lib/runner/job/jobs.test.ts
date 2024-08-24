@@ -15,6 +15,7 @@ describe("startJob", () => {
   const firewallDevice: Device = {
     id: 1,
     type: "opnsense",
+    name: null,
     hostname: "firewall.local",
     credentials: JSON.stringify({}),
     config: "{}",
@@ -26,6 +27,7 @@ describe("startJob", () => {
     id: 2,
     type: "tplink",
     hostname: "switch.local",
+    name: null,
     credentials: JSON.stringify({}),
     config: "{}",
     createdAt: new Date(),
