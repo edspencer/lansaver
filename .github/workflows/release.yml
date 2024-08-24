@@ -24,7 +24,7 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm install
-
+      - run: npx prisma generate
       - run: npx jest
 
   version:
