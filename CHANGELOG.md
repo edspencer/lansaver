@@ -1,5 +1,11 @@
 # lansaver
 
+## 0.4.1
+
+### Patch Changes
+
+- 2ab3d93: Switch Dockerfile to build from Node 20 (current LTS)
+
 ## 0.4.0
 
 ### Minor Changes
